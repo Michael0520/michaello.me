@@ -14,7 +14,7 @@ export default function HomePage() {
   }, {} as Record<string, typeof pages>);
 
   // Sort each category by date
-  Object.keys(categories).forEach(key => {
+  Object.keys(categories).forEach((key) => {
     categories[key].sort((a, b) => {
       const dateA = a.data.date ? new Date(a.data.date).getTime() : 0;
       const dateB = b.data.date ? new Date(b.data.date).getTime() : 0;
@@ -34,7 +34,7 @@ export default function HomePage() {
       <div className="mb-12">
         <h1 className="text-4xl font-bold mb-4">Blog</h1>
         <p className="text-muted-foreground text-lg">
-          技術文章、開發筆記與程式解題分享
+          Technical articles, development notes, and coding solutions
         </p>
       </div>
 
@@ -91,10 +91,11 @@ export default function HomePage() {
 export function generateMetadata() {
   return {
     title: siteConfig.site.name,
-    description: '技術文章、開發筆記與程式解題分享',
+    description: 'Technical articles, development notes, and coding solutions',
     openGraph: {
       title: siteConfig.site.name,
-      description: '技術文章、開發筆記與程式解題分享',
+      description:
+        'Technical articles, development notes, and coding solutions',
       url: siteConfig.site.url,
     },
   };
