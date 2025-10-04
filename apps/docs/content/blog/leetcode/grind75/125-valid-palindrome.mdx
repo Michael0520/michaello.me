@@ -1,0 +1,81 @@
+---
+title: Easy 125. Valid Palindrome
+description: In this blog I will share a solution to the Valid Palindrome problem.
+date: 2025-01-14
+read: '10'
+---
+## 解題思路
+  這題可以用「雙指針」的方式來解決，步驟如下：
+
+  1. **清理字串**
+
+     ```bash
+     'A man, a plan, a canal: Panama';
+     // (轉小寫 + 移除特殊字元)
+     'amanaplanacanalpanama';
+     ```
+
+  2. **使用雙指針比較**
+
+     ```bash
+     "amanaplanacanalpanama"
+        (L)                    `R`    // L = left pointer, R = right pointer
+
+     "amanaplanacanalpanama"
+       (L)                  (R)     // 如果相同，兩個指針往中間移動
+
+     "amanaplanacanalpanama"
+              (L)    (R)            // 一直比較到指針相遇
+     ```
+
+  ## 程式碼
+
+  ```javascript
+  function isPalindrome(s) {
+    // 1. 使用 optional chaining 和 nullish coalescing
+    const cleanStr = s?.toLowerCase()?.replace(/[^a-z0-9]/g, '') ?? '';
+
+    // 2. 使用解構賦值設置指針
+    let [left, right] = [0, cleanStr.length - 1];
+
+    // 3. 使用雙指針比較
+    while (left < right) {
+      // 使用 early return pattern
+      if (cleanStr[left] !== cleanStr[right]) {
+        return false
+        ;
+      }[left, right] = [left + 1, right - 1];
+    }
+
+    return true;
+  }
+  ```
+
+  ## 程式碼說明
+
+  1. **錯誤處理**
+
+     - 使用 optional chaining (`?.`) 處理 null/undefined
+     - 使用 nullish coalescing (`??`) 提供預設值
+
+  2. **程式碼可讀性**
+
+     - 使用解構賦值讓程式碼更簡潔
+     - 加入適當的註解說明邏輯
+     - 使用 early return pattern
+
+  3. **效能考量**
+     - 避免重複計算字串長度
+     - 使用解構賦值一次更新兩個指針
+
+  ## 解題心得
+
+  1. **雙指針技巧**
+
+     - 適合處理回文、排序等問題
+     - 可以有效減少迴圈次數
+
+  2. **字串處理技巧**
+     - 正則表達式是處理字串的好工具
+     - 善用 ES6+ 的字串方法
+

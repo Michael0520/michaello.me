@@ -1,0 +1,8 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "version": 2,
+  "buildCommand": "pnpm nx build slidevs --prod",
+  "installCommand": "pnpm install",
+  "outputDirectory": "apps/slidevs/.next",
+  "framework": "nextjs"
+}

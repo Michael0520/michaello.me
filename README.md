@@ -1,10 +1,191 @@
-# MiloMe
+# Milo Me - Monorepo Workspace
 
-<a alt="Nx logo" href="https://nx.dev" target="_blank" rel="noreferrer"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="45"></a>
+A modern monorepo workspace built with Nx, Next.js 15, Tailwind CSS v4, and shadcn/ui.
 
-✨ Your new, shiny [Nx workspace](https://nx.dev) is ready ✨.
+## Project Structure
 
-[Learn more about this workspace setup and its capabilities](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects) or run `npx nx graph` to visually explore what was created. Now, let's get you up to speed!
+```
+milo-me-new/
+├── apps/
+│   ├── side-projects/    # Side projects showcase
+│   ├── slidevs/          # Slides/presentations
+│   └── docs/             # Documentation & Blog (Fumadocs)
+├── libs/
+│   └── shared-ui/        # Shared UI components (shadcn/ui)
+├── .husky/               # Git hooks
+└── vercel.json           # Vercel deployment config
+```
+
+## Tech Stack
+
+- **Monorepo**: Nx 21.6.3
+- **Framework**: Next.js 15.3.0 (App Router)
+- **UI Library**: React 19.0.0
+- **Styling**: Tailwind CSS v4.0.0
+- **Components**: shadcn/ui
+- **Documentation**: Fumadocs v15
+- **Package Manager**: pnpm
+- **Type Safety**: TypeScript 5.9
+- **Linting**: ESLint 9 + Prettier
+- **Git Hooks**: Husky + lint-staged + commitlint
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 24+
+- pnpm 10+
+
+### Installation
+
+```bash
+pnpm install
+```
+
+### Development
+
+Run all apps in development mode:
+
+```bash
+pnpm dev
+```
+
+Run specific app:
+
+```bash
+pnpm nx dev side-projects
+pnpm nx dev slidevs
+pnpm nx dev docs
+```
+
+### Building
+
+Build all apps:
+
+```bash
+pnpm build
+```
+
+Build specific app:
+
+```bash
+pnpm nx build side-projects --prod
+```
+
+## Code Quality
+
+### Linting
+
+```bash
+pnpm lint
+```
+
+### Formatting
+
+```bash
+# Format all files
+pnpm format
+
+# Check formatting
+pnpm format:check
+```
+
+### Type Checking
+
+```bash
+pnpm type-check
+```
+
+## Git Commit Convention
+
+This project follows conventional commits with custom scope rules:
+
+### Format
+
+```
+<type>(<scope>): <description>
+
+[optional body]
+
+[optional footer]
+```
+
+### Types
+
+- `feat`: New features
+- `fix`: Bug fixes
+- `refactor`: Code refactoring
+- `test`: Testing changes
+- `docs`: Documentation
+- `chore`: Maintenance tasks
+- `perf`: Performance improvements
+- `style`: Code style changes
+- `build`: Build system changes
+- `ci`: CI/CD changes
+
+### Scopes
+
+- `side-projects`: Side projects app
+- `slidevs`: Slides app
+- `docs`: Documentation & Blog app
+- `shared-ui`: Shared UI library
+- `workspace`: Workspace-level changes
+- `*`: Multiple apps/libs
+
+### Examples
+
+```bash
+git commit -m "feat(side-projects): add project showcase grid"
+git commit -m "feat(docs): add new blog post about React"
+git commit -m "refactor(shared-ui): extract Button component"
+git commit -m "chore(workspace): update dependencies"
+```
+
+### Automated Checks
+
+- **Pre-commit**: Runs lint-staged (ESLint + Prettier)
+- **Commit-msg**: Validates commit message format
+
+## Deployment
+
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+
+### Quick Deploy to Vercel
+
+Each app needs to be deployed as a separate Vercel project:
+
+1. Import your repository to Vercel
+2. For each app, create a new project with:
+   - **Root Directory**: `apps/<app-name>`
+   - **Build Command**: `cd ../.. && pnpm nx build <app-name> --prod`
+   - **Output Directory**: `.next`
+
+## Adding shadcn/ui Components
+
+```bash
+# Add a component to shared-ui
+pnpm dlx shadcn@latest add button
+
+# Components will be added to libs/shared-ui/src/components/ui/
+```
+
+## Project Features
+
+- ✅ Nx integrated monorepo
+- ✅ Next.js 15 with App Router
+- ✅ React 19
+- ✅ Tailwind CSS v4 (zero-config)
+- ✅ shadcn/ui component library
+- ✅ Fumadocs for documentation & blog
+- ✅ TypeScript strict mode
+- ✅ ESLint + Prettier
+- ✅ Husky git hooks
+- ✅ Conventional commits
+- ✅ lint-staged
+- ✅ Vercel-ready deployment config
+- ✅ Shared UI library architecture
+
+---
 
 ## Run tasks
 

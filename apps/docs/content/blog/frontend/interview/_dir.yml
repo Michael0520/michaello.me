@@ -1,0 +1,4 @@
+title: Interview
+icon: mdi-light:pencil
+navigation.redirect: /frontend/interview/countdown-timer
+collapse: true
