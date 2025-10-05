@@ -4,6 +4,9 @@ import prettier from 'eslint-config-prettier';
 
 export default [
   {
+    ignores: ['**/next.config.js', '**/postcss.config.js'],
+  },
+  {
     files: ['**/*.{ts,tsx,js,jsx}'],
     languageOptions: {
       parser: tsparser,

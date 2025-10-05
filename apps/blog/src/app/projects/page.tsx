@@ -57,9 +57,7 @@ export default function ProjectsPage() {
       </section>
 
       <section>
-        <h2 className="text-2xl font-bold mb-6 border-b pb-2">
-          Open Source
-        </h2>
+        <h2 className="text-2xl font-bold mb-6 border-b pb-2">Open Source</h2>
         <div className="text-center text-muted-foreground py-8">
           Check out my{' '}
           <a

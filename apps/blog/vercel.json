@@ -1,8 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "buildCommand": "pnpm nx build portfolio --prod",
+  "buildCommand": "pnpm nx build blog --prod",
   "installCommand": "pnpm install",
-  "outputDirectory": "apps/portfolio/.next",
+  "outputDirectory": "apps/blog/.next",
   "framework": "nextjs"
 }
