@@ -1,8 +1,7 @@
 //@ts-check
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const { composePlugins, withNx } = require('@nx/next');
-const { createMDX } = require('fumadocs-mdx/next');
+import { composePlugins, withNx } from '@nx/next';
+import { createMDX } from 'fumadocs-mdx/next';
 
 const withMDX = createMDX();
 
@@ -40,4 +39,4 @@ const nextConfig = {
 
 const plugins = [withNx];
 
-module.exports = composePlugins(...plugins)(withMDX(nextConfig));
+export default composePlugins(...plugins)(withMDX(nextConfig));
