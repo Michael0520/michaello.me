@@ -21,8 +21,8 @@ pnpm remove <package> # Remove package
 pnpm dev
 
 # Run specific app
-pnpm nx dev docs
-pnpm nx dev side-projects
+pnpm nx dev portfolio
+pnpm nx dev lab-home
 pnpm nx dev slidevs
 ```
 
@@ -33,8 +33,8 @@ pnpm nx dev slidevs
 pnpm build
 
 # Build specific app (production)
-pnpm nx build docs --prod
-pnpm nx build side-projects --prod
+pnpm nx build portfolio --prod
+pnpm nx build lab-home --prod
 pnpm nx build slidevs --prod
 ```
 
@@ -62,10 +62,26 @@ pnpm nx reset                      # Clear Nx cache
 
 ```
 apps/
-├── docs/              # Main blog/documentation (Fumadocs + Next.js 15)
-│   └── content/blog/  # MDX blog posts organized by category
-├── side-projects/     # Side projects showcase (Next.js 15)
-└── slidevs/          # Presentations/slides (Next.js 15)
+├── portfolio/              # Main website (Fumadocs + Next.js 15)
+│   ├── src/app/
+│   │   ├── page.tsx       # Landing Page
+│   │   ├── posts/         # Blog (renamed from /blog)
+│   │   ├── projects/      # Projects showcase
+│   │   ├── talks/         # Talks/Presentations list
+│   │   └── about/         # About page (optional)
+│   └── content/posts/     # MDX blog posts organized by category
+│
+├── lab/                    # Lab projects folder
+│   └── home/              # Lab homepage (Next.js 15)
+│       ├── src/app/
+│       │   └── page.tsx   # Lab projects list
+│       └── next.config.js # basePath: '/lab'
+│
+└── slidevs/               # Presentations/slides (Next.js 15)
+    ├── src/app/
+    │   ├── page.tsx       # Slides list
+    │   └── [slug]/        # Individual slide routes
+    └── next.config.js     # basePath: '/slides'
 ```
 
 ### Libs Structure
@@ -84,16 +100,45 @@ libs/
 
 ### Important Files
 
-- `apps/docs/source.config.ts` - Fumadocs MDX configuration
-- `apps/docs/lib/blog-source.ts` - Blog content loader
+- `apps/portfolio/source.config.ts` - Fumadocs MDX configuration
+- `apps/portfolio/lib/blog-source.ts` - Blog content loader (baseUrl: '/posts')
+- `apps/portfolio/next.config.js` - Multi-Zones rewrites configuration
 - `libs/site-config/src/index.ts` - Site-wide config (author, analytics, URLs)
 - `commitlint.config.mjs` - Commit message validation rules
+
+## Multi-Zones Architecture
+
+This monorepo uses **Next.js Multi-Zones** to serve multiple apps under a single domain (`michaello.me`).
+
+### URL Structure
+
+```
+michaello.me/              → portfolio app (Landing Page)
+michaello.me/posts         → portfolio app (Blog)
+michaello.me/posts/xxx     → portfolio app (Blog articles)
+michaello.me/projects      → portfolio app (Projects showcase)
+michaello.me/talks         → portfolio app (Talks list)
+
+michaello.me/lab           → lab/home app (via rewrite)
+michaello.me/lab/calculator → lab/calculator app (future)
+michaello.me/lab/todo      → lab/todo app (future)
+
+michaello.me/slides        → slidevs app (via rewrite)
+michaello.me/slides/10-01  → slidevs app (individual slides)
+```
+
+### How Multi-Zones Work
+
+- **portfolio** app is the main zone (no basePath)
+- **lab/home** app uses `basePath: '/lab'`
+- **slidevs** app uses `basePath: '/slides'`
+- Portfolio's `next.config.js` contains `rewrites()` to route `/lab/*` and `/slides/*` to their respective Vercel deployments
 
 ## Blog Content (Fumadocs)
 
 ### Content Location
 
-Blog posts are in `apps/docs/content/blog/` organized by category:
+Blog posts are in `apps/portfolio/content/posts/` organized by category:
 
 - `frontend/` - Frontend articles (React, TypeScript, CSS, etc.)
 - `backend/` - Backend articles (JWT, encoding, etc.)
@@ -116,8 +161,8 @@ date: 2025-01-15
 
 ### Blog Source
 
-- Blog content is loaded via `blogSource` from `apps/docs/lib/blog-source.ts`
-- Uses Fumadocs loader with `/blog` base URL
+- Blog content is loaded via `blogSource` from `apps/portfolio/lib/blog-source.ts`
+- Uses Fumadocs loader with `/posts` base URL (changed from `/blog`)
 - Supports lucide-react icons in metadata
 
 ## Site Configuration
@@ -145,7 +190,7 @@ siteConfig.analytics; // { googleAnalyticsId, posthogApiKey, posthogHost }
 
 **Chinese is allowed ONLY in**:
 
-- Blog content (MDX files in `apps/docs/content/blog/`)
+- Blog content (MDX files in `apps/portfolio/content/posts/`)
 - Markdown documentation intended for Chinese readers
 
 ## Commit Convention
@@ -162,10 +207,13 @@ This project enforces conventional commits via `commitlint`:
 
 ### Required Scopes
 
-- `docs` - Documentation & Blog app
-- `side-projects` - Side projects app
+- `portfolio` - Portfolio/Main website app
+- `lab-home` - Lab homepage app
+- `lab-calculator` - Lab calculator app (future)
+- `lab-todo` - Lab todo app (future)
 - `slidevs` - Slides app
 - `shared-ui` - Shared UI library
+- `site-config` - Site configuration library
 - `workspace` - Workspace-level changes
 - `*` - Multiple apps/libs
 
@@ -176,27 +224,55 @@ This project enforces conventional commits via `commitlint`:
 ### Examples
 
 ```bash
-git commit -m "feat(docs): add new blog post about React hooks"
+git commit -m "feat(portfolio): add new landing page"
 git commit -m "fix(shared-ui): correct button hover state"
 git commit -m "chore(workspace): update dependencies"
+git commit -m "feat(lab-home): create lab projects showcase"
 ```
 
 **Note**: Scope is REQUIRED. Commits without scope will fail.
 
 ## Deployment (Vercel)
 
-Each app has its own `vercel.json`:
+Each app is deployed as a separate Vercel project:
 
-- `apps/docs/vercel.json` → michaello.me
-- `apps/side-projects/vercel.json` → side.michaello.me
-- `apps/slidevs/vercel.json` → slides.michaello.me
+### Portfolio (Main Zone)
+- **Domain**: `michaello.me`, `www.michaello.me`
+- **Vercel Project**: `michaello-portfolio`
+- **Root Directory**: Leave empty (monorepo root)
+- **Build Command**: `pnpm nx build portfolio --prod`
+- **Output Directory**: `apps/portfolio/.next`
+- **Framework**: Next.js
 
-Deploy as 3 separate Vercel projects:
+### Lab Home
+- **Domain**: None (accessed via rewrite from main domain)
+- **Vercel Project**: `michaello-lab-home`
+- **Root Directory**: Leave empty
+- **Build Command**: `pnpm nx build lab-home --prod`
+- **Output Directory**: `apps/lab/home/.next`
+- **Framework**: Next.js
 
-1. Set **Root Directory** to `apps/<app-name>`
-2. Vercel auto-detects `vercel.json` in each app
-3. Build command: `pnpm nx build <app-name> --prod`
-4. Output directory: `.next`
+### Slidevs
+- **Domain**: None (accessed via rewrite from main domain)
+- **Vercel Project**: `michaello-slides`
+- **Root Directory**: Leave empty
+- **Build Command**: `pnpm nx build slidevs --prod`
+- **Output Directory**: `apps/slidevs/.next`
+- **Framework**: Next.js
+
+**Important**: Update the Vercel URLs in `apps/portfolio/next.config.js` rewrites after deploying lab-home and slidevs.
+
+## Adding Lab Projects
+
+To add a new lab project (e.g., calculator):
+
+1. Create new app: `apps/lab/calculator/`
+2. Add `next.config.js` with `basePath: '/lab/calculator'`
+3. Create `project.json` with name `lab-calculator`
+4. Add to `commitlint.config.mjs` scopes
+5. Deploy to Vercel as separate project
+6. Add rewrite in `apps/portfolio/next.config.js`
+7. Update `apps/lab/home/src/app/page.tsx` to list the new project
 
 ## Adding shadcn/ui Components
 
@@ -226,6 +302,7 @@ import { Button } from '@milo-me/shared-ui';
 - **Components**: shadcn/ui
 - **Analytics**: Google Analytics + PostHog
 - **Git Hooks**: Husky + lint-staged + commitlint
+- **Multi-Zones**: Next.js Multi Zones with rewrites
 
 ## Key Patterns
 
@@ -240,6 +317,7 @@ import { Button } from '@milo-me/shared-ui';
 - All apps use App Router
 - Server Components by default
 - TypeScript strict mode
+- Multi-Zones for single-domain deployment
 
 ### Tailwind CSS v4
 
