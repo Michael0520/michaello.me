@@ -3,6 +3,7 @@ import {
   defineConfig,
   frontmatterSchema,
 } from 'fumadocs-mdx/config';
+import { remarkImage } from 'fumadocs-core/mdx-plugins';
 import { z } from 'zod';
 
 export const { docs, meta } = defineDocs({
@@ -23,7 +24,9 @@ export const { docs: blog, meta: blogMeta } = defineDocs({
 
 export default defineConfig({
   mdxOptions: {
-    remarkPlugins: [],
+    remarkPlugins: [
+      [remarkImage, { external: false }], // Disable fetching external image sizes
+    ],
     rehypePlugins: [],
   },
 });
