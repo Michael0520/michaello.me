@@ -1,9 +1,38 @@
 {
   "name": "slidevs",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/slidevs",
   "projectType": "application",
-  "tags": [],
-  "// targets": "to see all targets run: nx show project slidevs --web",
-  "targets": {}
+  "sourceRoot": "apps/slidevs",
+  "targets": {
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "slidev 2025-06-29/src/slides.md",
+        "cwd": "apps/slidevs"
+      }
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "slidev build 2025-06-29/src/slides.md --base /slides/2025-06-29 --out ../../dist/2025-06-29",
+        "cwd": "apps/slidevs"
+      },
+      "outputs": ["{projectRoot}/dist"]
+    },
+    "export": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "slidev export 2025-06-29/src/slides.md --output ../../dist/2025-06-29.pdf",
+        "cwd": "apps/slidevs"
+      }
+    },
+    "typecheck": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vue-tsc --noEmit",
+        "cwd": "apps/slidevs"
+      }
+    }
+  },
+  "tags": ["type:app", "platform:slidev"]
 }

@@ -23,7 +23,7 @@ pnpm dev
 # Run specific app
 pnpm nx dev blog
 pnpm nx dev lab-home
-pnpm nx dev slidevs
+cd apps/slidevs && pnpm dev  # Slidev (not managed by Nx)
 ```
 
 ### Building
@@ -35,7 +35,7 @@ pnpm build
 # Build specific app (production)
 pnpm nx build blog --prod
 pnpm nx build lab-home --prod
-pnpm nx build slidevs --prod
+cd apps/slidevs && pnpm build  # Slidev (not managed by Nx)
 ```
 
 ### Code Quality
@@ -77,11 +77,14 @@ apps/
 │       │   └── page.tsx   # Lab projects list
 │       └── next.config.js # basePath: '/lab'
 │
-└── slidevs/               # Presentations/slides (Next.js 15)
-    ├── src/app/
-    │   ├── page.tsx       # Slides list
-    │   └── [slug]/        # Individual slide routes
-    └── next.config.js     # basePath: '/slides'
+└── slidevs/               # Presentations/slides (Slidev)
+    ├── 2025-06-29/        # Individual talk (date-based)
+    │   └── src/
+    │       ├── slides.md  # Slide content
+    │       ├── components/# Custom Vue components
+    │       └── public/    # Images and assets
+    ├── package.json       # Slidev dependencies
+    └── vercel.json        # Static site deployment
 ```
 
 ### Libs Structure
