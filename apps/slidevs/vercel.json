@@ -3,7 +3,7 @@
   "version": 2,
   "buildCommand": "cd ../.. && pnpm nx build slidevs",
   "installCommand": "cd ../.. && pnpm install",
-  "outputDirectory": "dist/2025-06-29",
+  "outputDirectory": "./dist/2025-06-29",
   "framework": null,
   "routes": [
     {
