@@ -14,7 +14,7 @@
     "build": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "slidev build 2025-06-29/src/slides.md --base /slides/2025-06-29 --out ../../dist/2025-06-29",
+        "command": "slidev build 2025-06-29/src/slides.md --out ../../dist/2025-06-29",
         "cwd": "apps/slidevs"
       },
       "outputs": ["{projectRoot}/dist"]
