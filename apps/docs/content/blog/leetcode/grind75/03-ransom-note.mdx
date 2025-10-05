@@ -1,0 +1,158 @@
+---
+title: Ransom Note
+description: Check if ransom note can be constructed from magazine using Hash Map
+icon: FileText
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Determine if a ransom note can be constructed from magazine letters
+
+## 問題描述
+
+給你兩個字串：`ransomNote` 和 `magazine`，判斷 `ransomNote` 能不能由 `magazine` 裡面的字符構成。
+
+如果可以，返回 `true`；否則返回 `false`。
+
+`magazine` 中的每個字符只能在 `ransomNote` 中使用一次。
+
+## 範例
+
+```
+輸入：ransomNote = "a", magazine = "b"
+輸出：false
+
+輸入：ransomNote = "aa", magazine = "ab"
+輸出：false
+
+輸入：ransomNote = "aa", magazine = "aab"
+輸出：true
+```
+
+## 限制條件
+
+<Callout type="info">
+- `1 <= ransomNote.length, magazine.length <= 10⁵`
+- `ransomNote` 和 `magazine` 由小寫英文字母組成
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 計數 magazine 的字符
+統計 `magazine` 中每個字符出現的次數
+</Step>
+
+<Step>
+### 檢查 ransomNote 的需求
+遍歷 `ransomNote`，檢查每個字符是否在 `magazine` 中有足夠的數量
+</Step>
+
+<Step>
+### 扣除已使用的字符
+每使用一個字符，就從計數中扣除，避免重複使用
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+export function canConstruct(ransomNote: string, magazine: string): boolean {
+  const charCount = new Map<string, number>();
+
+  // 統計 magazine 中每個字符的出現次數
+  for (const char of magazine) {
+    charCount.set(char, (charCount.get(char) || 0) + 1);
+  }
+
+  // 檢查 ransomNote 中的每個字符
+  for (const char of ransomNote) {
+    const count = charCount.get(char) || 0;
+    if (count === 0) {
+      return false; // 字符不足或不存在
+    }
+    charCount.set(char, count - 1); // 扣除已使用的字符
+  }
+
+  return true;
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { canConstruct } from './solution';
+
+describe('ransom Note', () => {
+  it('should return true when ransomNote can be constructed', () => {
+    expect(canConstruct('aa', 'aab')).toBe(true);
+  });
+
+  it('should return false when ransomNote cannot be constructed', () => {
+    expect(canConstruct('a', 'b')).toBe(false);
+    expect(canConstruct('aa', 'ab')).toBe(false);
+  });
+
+  it('should handle empty strings', () => {
+    expect(canConstruct('', '')).toBe(true);
+    expect(canConstruct('', 'abc')).toBe(true);
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### Hash Map 方法
+
+這個問題的核心是字符計數和匹配。
+
+#### 算法步驟
+
+1. **建立字符計數表**
+   - 遍歷 `magazine`，統計每個字符的出現次數
+   - 使用 `Map<string, number>` 來儲存
+
+2. **檢查贖金信需求**
+   - 遍歷 `ransomNote` 中的每個字符
+   - 檢查該字符在 magazine 中是否有足夠的數量
+
+3. **扣除使用的字符**
+   - 每使用一個字符，就從計數中減 1
+   - 如果計數為 0，表示該字符已用完
+
+#### 複雜度分析
+- **時間複雜度**: O(m + n)，其中 m 是 magazine 長度，n 是 ransomNote 長度
+- **空間複雜度**: O(k)，其中 k 是 magazine 中不同字符的數量
+
+<Callout type="tip">
+關鍵點在於先計算可用資源（magazine），再檢查需求（ransomNote）是否能被滿足
+</Callout>
+
+#### 演算過程示例
+以 `ransomNote = "aa", magazine = "aab"` 為例：
+
+1. **計數階段**: `{a: 2, b: 1}`
+2. **檢查第一個 'a'**: 計數變為 `{a: 1, b: 1}`
+3. **檢查第二個 'a'**: 計數變為 `{a: 0, b: 1}`
+4. **結果**: 成功構造，返回 `true`
+
+#### 邊界情況
+- 空的 `ransomNote`: 總是可以構造
+- `magazine` 比 `ransomNote` 短: 可能無法構造
+- 相同字符數量不匹配: 無法構造
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [242. Valid Anagram](https://leetcode.com/problems/valid-anagram/)
+- [387. First Unique Character in a String](https://leetcode.com/problems/first-unique-character-in-a-string/)
+- [49. Group Anagrams](https://leetcode.com/problems/group-anagrams/)

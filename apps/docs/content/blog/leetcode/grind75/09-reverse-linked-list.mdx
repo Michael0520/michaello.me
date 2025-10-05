@@ -1,0 +1,249 @@
+---
+title: Reverse Linked List
+description: Reverse a singly linked list using iterative approach with pointer manipulation
+icon: RotateCcw
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Reverse a singly linked list and return the new head
+
+## 問題描述
+
+給你單鏈表的頭節點 `head`，請你反轉鏈表，並返回反轉後鏈表的頭節點。
+
+## 範例
+
+```
+輸入：head = [1,2,3,4,5]
+輸出：[5,4,3,2,1]
+
+輸入：head = [1,2]
+輸出：[2,1]
+
+輸入：head = []
+輸出：[]
+```
+
+## 限制條件
+
+<Callout type="info">
+- 鏈表中節點的數目範圍是 `[0, 5000]`
+- `-5000 <= Node.val <= 5000`
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 三指針技巧
+使用 prev、curr、next 三個指針來操作鏈表
+</Step>
+
+<Step>
+### 逐步反轉
+遍歷鏈表，逐個反轉每個節點的指向
+</Step>
+
+<Step>
+### 更新指針
+每次反轉後更新三個指針的位置
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+export class ListNode {
+  val: number;
+  next: ListNode | null;
+  constructor(val?: number, next?: ListNode | null) {
+    this.val = val === undefined ? 0 : val;
+    this.next = next === undefined ? null : next;
+  }
+}
+
+export function reverseList(head: ListNode | null): ListNode | null {
+  type Pointers = Record<'prev' | 'curr', ListNode | null>;
+
+  const pointers: Pointers = {
+    prev: null,
+    curr: head,
+  };
+
+  while (pointers.curr) {
+    const updatePointers = ({ curr, prev }: Pointers) => ({
+      next: prev,
+      newPrev: curr!,
+      newCurr: curr!.next,
+    });
+
+    const { next, newPrev, newCurr } = updatePointers(pointers);
+
+    pointers.curr.next = next;
+    pointers.prev = newPrev;
+    pointers.curr = newCurr;
+  }
+
+  return pointers.prev;
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { ListNode, reverseList } from './solution';
+
+describe('206. Reverse Linked List', () => {
+  function createLinkedList(arr: number[]): ListNode | null {
+    if (arr.length === 0)
+      return null;
+    const head = new ListNode(arr[0]);
+    let current = head;
+    for (let i = 1; i < arr.length; i++) {
+      current.next = new ListNode(arr[i]);
+      current = current.next;
+    }
+    return head;
+  }
+
+  function linkedListToArray(head: ListNode | null): number[] {
+    const result: number[] = [];
+    let current = head;
+    while (current !== null) {
+      result.push(current.val);
+      current = current.next;
+    }
+    return result;
+  }
+
+  it('should reverse a linked list about 5 nodes', () => {
+    const input = createLinkedList([1, 2, 3, 4, 5]);
+    const result = reverseList(input);
+    expect(linkedListToArray(result)).toEqual([5, 4, 3, 2, 1]);
+  });
+
+  it('should reverse a linked list about 3 nodes', () => {
+    const input = createLinkedList([1, 2, 3]);
+    const result = reverseList(input);
+    expect(linkedListToArray(result)).toEqual([3, 2, 1]);
+  });
+
+  it('should handle empty list', () => {
+    expect(reverseList(null)).toBeNull();
+  });
+
+  it('should handle single node', () => {
+    const input = createLinkedList([1]);
+    const result = reverseList(input);
+    expect(linkedListToArray(result)).toEqual([1]);
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### 迭代反轉法
+
+這個解法使用迭代的方式反轉鏈表，是最直觀且高效的方法。
+
+#### 核心思想
+
+使用三個指針遍歷鏈表：
+- `prev`: 前一個節點
+- `curr`: 當前節點 
+- `next`: 下一個節點（用於保存引用）
+
+#### 反轉過程
+
+1. **保存下一個節點**: 防止斷開連接後丟失
+2. **反轉當前節點**: `curr.next = prev`
+3. **移動指針**: 更新 prev 和 curr 的位置
+
+#### 複雜度分析
+- **時間複雜度**: O(n) - 遍歷鏈表一次
+- **空間複雜度**: O(1) - 只使用常數額外空間
+
+<Callout type="tip">
+這個解法的關鍵是理解如何在不丟失節點的情況下逐步反轉指針方向
+</Callout>
+
+#### 執行過程示例
+
+以鏈表 `[1,2,3]` 為例：
+
+**初始狀態**:
+```
+prev = null, curr = 1 -> 2 -> 3 -> null
+```
+
+**第一次迭代**:
+```
+next = 2 -> 3 -> null  // 保存
+curr.next = null       // 反轉
+prev = 1, curr = 2     // 移動
+結果: null <- 1   2 -> 3 -> null
+```
+
+**第二次迭代**:
+```
+next = 3 -> null
+curr.next = 1
+prev = 2, curr = 3
+結果: null <- 1 <- 2   3 -> null
+```
+
+**第三次迭代**:
+```
+next = null
+curr.next = 2
+prev = 3, curr = null
+結果: null <- 1 <- 2 <- 3
+```
+
+#### 遞歸版本
+
+```typescript
+function reverseListRecursive(head: ListNode | null): ListNode | null {
+  // 基礎情況
+  if (!head || !head.next) {
+    return head;
+  }
+  
+  // 遞歸反轉剩餘部分
+  const newHead = reverseListRecursive(head.next);
+  
+  // 反轉當前連接
+  head.next.next = head;
+  head.next = null;
+  
+  return newHead;
+}
+```
+
+**遞歸版本特點**:
+- 時間複雜度：O(n)
+- 空間複雜度：O(n) - 遞歸調用棧
+- 更簡潔但使用額外棧空間
+
+#### 實際應用場景
+
+1. **撤銷操作**: 實現操作歷史的回退功能
+2. **數據結構設計**: 實現雙端隊列等結構
+3. **算法競賽**: 鏈表操作的基礎技能
+4. **面試考察**: 考查對指針操作的理解
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [92. Reverse Linked List II](https://leetcode.com/problems/reverse-linked-list-ii/)
+- [25. Reverse Nodes in k-Group](https://leetcode.com/problems/reverse-nodes-in-k-group/)
+- [234. Palindrome Linked List](https://leetcode.com/problems/palindrome-linked-list/)

@@ -1,0 +1,309 @@
+---
+title: 01 Matrix
+description: Calculate distance to nearest 0 for each cell using multi-source BFS
+icon: Grid3x3
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Calculate the shortest distance from each cell to the nearest 0
+
+## 問題描述
+
+給定一個由 `0` 和 `1` 組成的矩陣 `mat`，請輸出一個大小相同的矩陣，其中每一個格子是 `mat` 中對應位置元素到最近的 `0` 的距離。
+
+兩個相鄰元素間的距離為 `1`。
+
+## 範例
+
+```
+輸入：mat = [[0,0,0],[0,1,0],[0,0,0]]
+輸出：[[0,0,0],[0,1,0],[0,0,0]]
+
+輸入：mat = [[0,0,0],[0,1,0],[1,1,1]]
+輸出：[[0,0,0],[0,1,0],[1,2,1]]
+```
+
+## 限制條件
+
+<Callout type="info">
+- `m == mat.length`
+- `n == mat[i].length`
+- `1 <= m, n <= 10⁴`
+- `1 <= m * n <= 10⁴`
+- `mat[i][j]` 是 `0` 或 `1`
+- `mat` 中至少有一個 `0`
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 多源 BFS 起點
+將所有值為 0 的位置作為 BFS 的起始點
+</Step>
+
+<Step>
+### 同時擴散
+從所有 0 位置同時開始 BFS 擴散，計算距離
+</Step>
+
+<Step>
+### 四個方向遍歷
+對每個位置檢查上下左右四個方向的相鄰位置
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+interface Cell {
+  x: number;
+  y: number;
+  distance: number;
+}
+
+type Matrix = number[][];
+
+export function updateMatrix(mat: Matrix): Matrix {
+  const HEIGHT = mat.length;
+  const WIDTH = mat[0].length;
+
+  if (HEIGHT === 1 && WIDTH === 1) {
+    return [[mat[0][0]]];
+  }
+
+  const distances = Array.from({ length: HEIGHT }, () =>
+    Array.from({ length: WIDTH }).fill(Infinity)) as Matrix;
+
+  const bfsQueue: Cell[] = [];
+
+  mat.forEach((row, x) => {
+    row.forEach((cell, y) => {
+      if (cell === 0) {
+        distances[x][y] = 0;
+        bfsQueue.push({ x, y, distance: 0 });
+      }
+    });
+  });
+
+  if (bfsQueue.length === 0) {
+    return mat;
+  }
+
+  const DIRECTIONS = [
+    [-1, 0], // up
+    [0, 1],  // right
+    [1, 0],  // down
+    [0, -1], // left
+  ] as const;
+
+  while (bfsQueue.length > 0) {
+    const currentCell = bfsQueue.shift()!;
+
+    DIRECTIONS.forEach(([dx, dy]) => {
+      const nextX = currentCell.x + dx;
+      const nextY = currentCell.y + dy;
+
+      const isInBounds = nextX >= 0 && nextX < HEIGHT
+        && nextY >= 0 && nextY < WIDTH;
+
+      if (isInBounds) {
+        const newDistance = currentCell.distance + 1;
+        const canUpdate = distances[nextX][nextY] > newDistance;
+
+        if (canUpdate) {
+          distances[nextX][nextY] = newDistance;
+          bfsQueue.push({
+            x: nextX,
+            y: nextY,
+            distance: newDistance,
+          });
+        }
+      }
+    });
+  }
+
+  return distances;
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { updateMatrix } from './solution';
+
+describe('542. 01 Matrix', () => {
+  it('should calculate distance to nearest 0 correctly', () => {
+    const input = [
+      [0, 0, 0],
+      [0, 1, 0],
+      [0, 0, 0],
+    ];
+    const expected = [
+      [0, 0, 0],
+      [0, 1, 0],
+      [0, 0, 0],
+    ];
+    expect(updateMatrix(input)).toEqual(expected);
+  });
+
+  it('should handle more complex matrix', () => {
+    const input = [
+      [0, 0, 0],
+      [0, 1, 0],
+      [1, 1, 1],
+    ];
+    const expected = [
+      [0, 0, 0],
+      [0, 1, 0],
+      [1, 2, 1],
+    ];
+    expect(updateMatrix(input)).toEqual(expected);
+  });
+
+  it('should handle single element matrix', () => {
+    expect(updateMatrix([[0]])).toEqual([[0]]);
+    expect(updateMatrix([[1]])).toEqual([[1]]);
+  });
+
+  it('should handle larger matrix', () => {
+    const input = [
+      [1, 1, 1],
+      [1, 1, 1],
+      [1, 1, 0],
+    ];
+    const expected = [
+      [4, 3, 2],
+      [3, 2, 1],
+      [2, 1, 0],
+    ];
+    expect(updateMatrix(input)).toEqual(expected);
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### 多源 BFS 算法
+
+這個問題是 BFS 的經典應用，特別是多源 BFS 的使用場景。
+
+#### 核心思想
+
+與傳統 BFS 從單一起點開始不同，這裡需要從所有值為 0 的位置同時開始搜索。
+
+#### 算法步驟
+
+1. **初始化**：
+   - 創建距離矩陣，初始值為無窮大
+   - 將所有 0 位置的距離設為 0，並加入 BFS 隊列
+
+2. **BFS 擴散**：
+   - 從隊列中取出當前位置
+   - 檢查四個方向的相鄰位置
+   - 如果能更新距離，就更新並加入隊列
+
+3. **距離更新條件**：
+   ```typescript
+   const newDistance = currentCell.distance + 1;
+   const canUpdate = distances[nextX][nextY] > newDistance;
+   ```
+
+#### 複雜度分析
+- **時間複雜度**: O(m × n) - 每個位置最多被訪問一次
+- **空間複雜度**: O(m × n) - 距離矩陣和 BFS 隊列的空間
+
+<Callout type="tip">
+多源 BFS 的關鍵是將所有源點同時加入隊列，這樣可以保證計算出的是到最近源點的距離
+</Callout>
+
+#### 執行過程示例
+
+以矩陣 `[[0,0,0],[0,1,0],[1,1,1]]` 為例：
+
+**步驟 1：初始化**
+- 距離矩陣：`[[0,0,0],[0,∞,0],[∞,∞,∞]]`
+- 隊列：`[(0,0,0), (0,1,0), (0,2,0), (1,0,0), (1,2,0)]`
+
+**步驟 2：BFS 擴散**
+- 處理 (0,0)：更新 (1,0) 距離為 0（已是 0）
+- 處理 (0,1)：更新 (1,1) 距離為 1
+- 處理 (0,2)：更新 (1,2) 距離為 0（已是 0）
+- ...繼續直到隊列為空
+
+**最終結果**：`[[0,0,0],[0,1,0],[1,2,1]]`
+
+#### 邊界情況處理
+
+1. **單元素矩陣**：直接返回原矩陣
+2. **全為 0 的矩陣**：所有位置距離都為 0
+3. **只有一個 0**：從該位置開始的曼哈頓距離
+
+#### 方向數組的使用
+
+```typescript
+const DIRECTIONS = [
+  [-1, 0], // 上
+  [0, 1],  // 右  
+  [1, 0],  // 下
+  [0, -1], // 左
+] as const;
+```
+
+使用 `as const` 確保 TypeScript 將其視為只讀數組。
+
+#### 替代解法：動態規劃
+
+```typescript
+function updateMatrixDP(mat: number[][]): number[][] {
+  const m = mat.length, n = mat[0].length;
+  const dp = Array.from({ length: m }, () => 
+    Array(n).fill(Infinity)
+  );
+  
+  // 初始化 0 位置
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (mat[i][j] === 0) {
+        dp[i][j] = 0;
+      }
+    }
+  }
+  
+  // 從左上到右下
+  for (let i = 0; i < m; i++) {
+    for (let j = 0; j < n; j++) {
+      if (i > 0) dp[i][j] = Math.min(dp[i][j], dp[i-1][j] + 1);
+      if (j > 0) dp[i][j] = Math.min(dp[i][j], dp[i][j-1] + 1);
+    }
+  }
+  
+  // 從右下到左上
+  for (let i = m - 1; i >= 0; i--) {
+    for (let j = n - 1; j >= 0; j--) {
+      if (i < m - 1) dp[i][j] = Math.min(dp[i][j], dp[i+1][j] + 1);
+      if (j < n - 1) dp[i][j] = Math.min(dp[i][j], dp[i][j+1] + 1);
+    }
+  }
+  
+  return dp;
+}
+```
+
+這個 DP 解法時間複雜度相同，但空間複雜度更優。
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [286. Walls and Gates](https://leetcode.com/problems/walls-and-gates/)
+- [1162. As Far from Land as Possible](https://leetcode.com/problems/as-far-from-land-as-possible/)
+- [934. Shortest Bridge](https://leetcode.com/problems/shortest-bridge/)

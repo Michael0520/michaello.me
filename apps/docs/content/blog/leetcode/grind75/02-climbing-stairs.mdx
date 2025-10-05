@@ -1,0 +1,168 @@
+---
+title: Climbing Stairs
+description: Dynamic programming solution using Fibonacci sequence pattern
+icon: TrendingUp
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Calculate number of distinct ways to climb stairs, taking 1 or 2 steps at a time
+
+## 問題描述
+
+假設你正在爬樓梯。需要 `n` 階你才能到達樓頂。
+
+每次你可以爬 `1` 或 `2` 個台階。你有多少種不同的方法可以爬到樓頂呢？
+
+## 範例
+
+```
+輸入：n = 2
+輸出：2
+解釋：有兩種方法可以爬到樓頂。
+1. 1 階 + 1 階
+2. 2 階
+
+輸入：n = 3
+輸出：3
+解釋：有三種方法可以爬到樓頂。
+1. 1 階 + 1 階 + 1 階
+2. 1 階 + 2 階
+3. 2 階 + 1 階
+```
+
+## 限制條件
+
+<Callout type="info">
+- `1 <= n <= 45`
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 找出規律
+- 到達第 1 階：1 種方法
+- 到達第 2 階：2 種方法
+- 到達第 3 階：3 種方法（從第 1 階爬 2 步 + 從第 2 階爬 1 步）
+</Step>
+
+<Step>
+### 斐波那契數列
+發現規律：`f(n) = f(n-1) + f(n-2)`，這是典型的斐波那契數列
+</Step>
+
+<Step>
+### 空間優化
+使用兩個變數儲存前兩個狀態，避免使用額外的陣列空間
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+/**
+ * 計算爬樓梯的所有可能方法數
+ *
+ * 原理：每一階的方法數等於前兩階方法數的總和
+ * - 從 n-1 階爬 1 步到達 n 階
+ * - 從 n-2 階爬 2 步到達 n 階
+ */
+export function climbStairs(totalStairs: number): number {
+  // 處理基礎案例
+  if (totalStairs <= 2) {
+    return totalStairs;
+  }
+
+  // 初始狀態
+  let [twoStepsBefore, oneStepBefore] = [1, 2];
+
+  // 從第 3 階開始計算
+  Array.from({ length: totalStairs - 2 }).forEach(() => {
+    [twoStepsBefore, oneStepBefore] = [
+      oneStepBefore,
+      twoStepsBefore + oneStepBefore,
+    ];
+  });
+
+  return oneStepBefore;
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { climbStairs } from './solution';
+
+describe('climbing Stairs', () => {
+  it('應該正確處理基礎案例', () => {
+    // n <= 2 的情況
+    expect(climbStairs(1)).toBe(1);
+    expect(climbStairs(2)).toBe(2);
+  });
+
+  it('應該正確計算一般案例', () => {
+    // n > 2 的情況
+    expect(climbStairs(3)).toBe(3);
+    expect(climbStairs(4)).toBe(5);
+    expect(climbStairs(5)).toBe(8);
+  });
+
+  it('應該能處理較大的數字', () => {
+    // 測試較大的階數
+    expect(climbStairs(6)).toBe(13);
+    expect(climbStairs(7)).toBe(21);
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### 動態規劃方法
+
+這個問題可以用動態規劃來解決，實質上是斐波那契數列的應用。
+
+#### 狀態轉移方程
+```
+dp[i] = dp[i-1] + dp[i-2]
+```
+
+#### 空間優化
+不需要儲存所有的狀態，只需要前兩個狀態即可：
+
+1. **初始化**：第 1 階有 1 種方法，第 2 階有 2 種方法
+2. **狀態轉移**：當前階數的方法數 = 前一階方法數 + 前兩階方法數
+3. **滾動陣列**：使用兩個變數來節省空間
+
+#### 複雜度分析
+- **時間複雜度**: O(n) - 需要計算到第 n 階
+- **空間複雜度**: O(1) - 只使用兩個變數儲存狀態
+
+<Callout type="tip">
+這個解法的關鍵是認識到每一階的到達方法數等於前兩階方法數的和，因為只能從前一階爬 1 步或前兩階爬 2 步到達當前階
+</Callout>
+
+#### 斐波那契數列對應表
+| n  | 方法數 | 斐波那契 |
+|----|--------|----------|
+| 1  | 1      | F(1)     |
+| 2  | 2      | F(2)     |
+| 3  | 3      | F(3)     |
+| 4  | 5      | F(4)     |
+| 5  | 8      | F(5)     |
+| 6  | 13     | F(6)     |
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [746. Min Cost Climbing Stairs](https://leetcode.com/problems/min-cost-climbing-stairs/)
+- [509. Fibonacci Number](https://leetcode.com/problems/fibonacci-number/)
+- [1137. N-th Tribonacci Number](https://leetcode.com/problems/n-th-tribonacci-number/)

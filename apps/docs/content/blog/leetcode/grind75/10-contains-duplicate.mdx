@@ -1,0 +1,191 @@
+---
+title: Contains Duplicate
+description: Detect if array contains duplicate elements using Set or Map
+icon: Copy
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Determine if an array contains any duplicate elements
+
+## 問題描述
+
+給你一個整數數組 `nums`。如果任一值在數組中出現 **至少兩次**，返回 `true`；如果數組中每個元素都不相同，則返回 `false`。
+
+## 範例
+
+```
+輸入：nums = [1,2,3,1]
+輸出：true
+
+輸入：nums = [1,2,3,4]
+輸出：false
+
+輸入：nums = [1,1,1,3,3,4,3,2,4,2]
+輸出：true
+```
+
+## 限制條件
+
+<Callout type="info">
+- `1 <= nums.length <= 10⁵`
+- `-10⁹ <= nums[i] <= 10⁹`
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### Set 去重特性
+利用 Set 不允許重複元素的特性
+</Step>
+
+<Step>
+### 長度比較
+比較原數組和 Set 的長度差異
+</Step>
+
+<Step>
+### 早期退出優化
+使用 Map 在發現重複時立即返回
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+export function containsDuplicate(nums: number[]): boolean {
+  return new Set(nums).size !== nums.length;
+}
+
+export function containsDuplicateMap(nums: number[]): boolean {
+  const countMap = new Map<number, number>();
+
+  for (const num of nums) {
+    const count = (countMap.get(num) || 0) + 1;
+    if (count > 1)
+      return true;
+    countMap.set(num, count);
+  }
+  return false;
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { containsDuplicate, containsDuplicateMap } from './solution';
+
+describe('217. Contains Duplicate', () => {
+  describe('set Solution', () => {
+    it('should return true when duplicates exist', () => {
+      expect(containsDuplicate([1, 2, 3, 1])).toBe(true);
+    });
+
+    it('should return false when no duplicates exist', () => {
+      expect(containsDuplicate([1, 2, 3, 4])).toBe(false);
+    });
+
+    it('should handle multiple duplicates', () => {
+      expect(containsDuplicate([1, 1, 1, 3, 3, 4, 3, 2, 4, 2])).toBe(true);
+    });
+  });
+
+  describe('map Solution', () => {
+    it('should return true when duplicates exist', () => {
+      expect(containsDuplicateMap([1, 2, 3, 1])).toBe(true);
+    });
+
+    it('should return false when no duplicates exist', () => {
+      expect(containsDuplicateMap([1, 2, 3, 4])).toBe(false);
+    });
+
+    it('should handle multiple duplicates', () => {
+      expect(containsDuplicateMap([1, 1, 1, 3, 3, 4, 3, 2, 4, 2])).toBe(true);
+    });
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### 兩種解法比較
+
+這個問題有多種解決方案，每種都有不同的時間和空間特性。
+
+#### 方法 1：Set 解法
+```typescript
+return new Set(nums).size !== nums.length;
+```
+
+**優點:**
+- 代碼極其簡潔
+- 利用 JavaScript 內建的 Set 特性
+- 一行解決問題
+
+**缺點:**
+- 需要處理完整個數組才能得到結果
+- 內存使用可能較大
+
+#### 方法 2：Map 計數解法
+```typescript
+for (const num of nums) {
+  const count = (countMap.get(num) || 0) + 1;
+  if (count > 1) return true;
+  countMap.set(num, count);
+}
+```
+
+**優點:**
+- 早期退出：一發現重複就立即返回
+- 在最壞情況下才使用完整空間
+- 更適合面試討論
+
+**缺點:**
+- 代碼稍微複雜
+
+#### 複雜度分析
+
+| 方法 | 時間複雜度 | 空間複雜度 | 早期退出 |
+|------|------------|------------|----------|
+| Set | O(n) | O(n) | ❌ |
+| Map | O(n) | O(n) | ✅ |
+
+<Callout type="tip">
+對於面試，建議先提到簡潔的 Set 解法，然後討論 Map 解法的早期退出優勢
+</Callout>
+
+#### 其他可能的方法
+
+1. **排序後檢查**: 
+   - 時間 O(n log n)，空間 O(1)
+   - 會修改原數組
+
+2. **暴力解法**: 
+   - 時間 O(n²)，空間 O(1)
+   - 對每個元素檢查後續元素
+
+3. **位操作** (限於特定範圍):
+   - 適用於數字範圍較小的情況
+   - 可以達到 O(1) 空間
+
+#### 實際應用場景
+- 數據去重檢查
+- 驗證用戶輸入的唯一性
+- 數據庫約束驗證
+- 緩存鍵衝突檢測
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [219. Contains Duplicate II](https://leetcode.com/problems/contains-duplicate-ii/)
+- [220. Contains Duplicate III](https://leetcode.com/problems/contains-duplicate-iii/)
+- [268. Missing Number](https://leetcode.com/problems/missing-number/)

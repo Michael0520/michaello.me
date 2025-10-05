@@ -1,0 +1,262 @@
+---
+title: Middle of the Linked List
+description: Find the middle node of a linked list using two-pointer technique
+icon: Link
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Find the middle node of a linked list using fast and slow pointers
+
+## 問題描述
+
+給你單鏈表的頭節點 `head`，請你返回鏈表的中間節點。
+
+如果有兩個中間節點，則返回第二個中間節點。
+
+## 範例
+
+```
+輸入：head = [1,2,3,4,5]
+輸出：[3,4,5]
+解釋：鏈表只有一個中間節點，值為 3
+
+輸入：head = [1,2,3,4,5,6]
+輸出：[4,5,6]  
+解釋：鏈表有兩個中間節點，值分別為 3 和 4，返回第二個節點
+```
+
+## 限制條件
+
+<Callout type="info">
+- 鏈表的節點數範圍是 `[1, 100]`
+- `1 <= Node.val <= 100`
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 雙指針設置
+設置快指針和慢指針，都從頭節點開始
+</Step>
+
+<Step>
+### 移動規則
+快指針每次移動兩步，慢指針每次移動一步
+</Step>
+
+<Step>
+### 終止條件
+當快指針到達鏈表末尾時，慢指針正好在中間位置
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+/**
+ * Definition for singly-linked list.
+ */
+export class ListNode {
+    val: number;
+    next: ListNode | null;
+    constructor(val?: number, next?: ListNode | null) {
+        this.val = val === undefined ? 0 : val;
+        this.next = next === undefined ? null : next;
+    }
+}
+
+export function middleNode(head: ListNode | null): ListNode | null {
+    // Handle empty linked list
+    if (!head)
+        return null;
+
+    let slowPointer = head;
+    let fastPointer = head;
+
+    // Continue moving while:
+    // 1. fastPointer is not null (handles odd length)
+    // 2. fastPointer.next is not null (handles even length)
+    while (fastPointer && fastPointer.next) {
+        // Because of while condition, slowPointer definitely exists
+        slowPointer = slowPointer.next as ListNode;
+        // Move fast pointer two steps
+        fastPointer = fastPointer.next.next as ListNode;
+    }
+
+    return slowPointer;
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { ListNode, middleNode } from './solution';
+
+describe('876. Middle of the Linked List', () => {
+  // Helper function to create a linked list
+  function createLinkedList(arr: number[]): ListNode | null {
+    if (arr.length === 0)
+      return null;
+
+    const head = new ListNode(arr[0]);
+    let current = head;
+    for (let i = 1; i < arr.length; i++) {
+      current.next = new ListNode(arr[i]);
+      current = current.next;
+    }
+    return head;
+  }
+
+  // Helper function to convert linked list to array
+  function linkedListToArray(head: ListNode | null): number[] {
+    const result: number[] = [];
+    let current = head;
+    while (current !== null) {
+      result.push(current.val);
+      current = current.next;
+    }
+    return result;
+  }
+
+  it('should handle example case 1', () => {
+    const head = createLinkedList([1, 2, 3, 4, 5]);
+    const result = middleNode(head);
+    expect(linkedListToArray(result)).toEqual([3, 4, 5]);
+  });
+
+  it('should handle example case 2', () => {
+    const head = createLinkedList([1, 2, 3, 4, 5, 6]);
+    const result = middleNode(head);
+    expect(linkedListToArray(result)).toEqual([4, 5, 6]);
+  });
+
+  it('should handle single node', () => {
+    const head = createLinkedList([1]);
+    const result = middleNode(head);
+    expect(linkedListToArray(result)).toEqual([1]);
+  });
+
+  it('should handle two nodes', () => {
+    const head = createLinkedList([1, 2]);
+    const result = middleNode(head);
+    expect(linkedListToArray(result)).toEqual([2]);
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### 快慢指針技巧
+
+這個問題是雙指針技巧的經典應用，也被稱為"龜兔賽跑"算法。
+
+#### 核心思想
+
+使用兩個指針以不同速度遍歷鏈表：
+- **慢指針**：每次移動一步
+- **快指針**：每次移動兩步
+
+當快指針到達鏈表末尾時，慢指針恰好在中間位置。
+
+#### 數學證明
+
+**對於奇數長度鏈表** (長度 = 2k+1)：
+- 快指針需要 k 次移動到達末尾
+- 慢指針移動 k 步後，正好在第 k+1 個節點（中間節點）
+
+**對於偶數長度鏈表** (長度 = 2k)：
+- 快指針需要 k 次移動到達末尾
+- 慢指針移動 k 步後，在第 k+1 個節點（第二個中間節點）
+
+#### 複雜度分析
+- **時間複雜度**: O(n) - 最多遍歷鏈表一次
+- **空間複雜度**: O(1) - 只使用兩個指針變量
+
+<Callout type="tip">
+這個算法的優勢是只需要一次遍歷，不需要先計算鏈表長度
+</Callout>
+
+#### 執行過程示例
+
+以鏈表 `[1,2,3,4,5]` 為例：
+
+| 步驟 | 慢指針位置 | 快指針位置 | 說明 |
+|------|------------|------------|------|
+| 初始 | 1 | 1 | 都在頭節點 |
+| 1 | 2 | 3 | 慢+1，快+2 |
+| 2 | 3 | 5 | 慢+1，快+2 |
+| 終止 | 3 | null | 快指針到達末尾 |
+
+結果：慢指針在節點 3，返回 `[3,4,5]`
+
+#### 邊界情況處理
+
+1. **空鏈表**：直接返回 null
+2. **單個節點**：快慢指針都在同一節點，返回該節點
+3. **兩個節點**：返回第二個節點
+
+#### 循環條件分析
+
+```typescript
+while (fastPointer && fastPointer.next)
+```
+
+這個條件同時處理奇數和偶數長度：
+- `fastPointer`：處理奇數長度鏈表
+- `fastPointer.next`：處理偶數長度鏈表
+
+#### 相關應用
+
+1. **檢測鏈表環**：Floyd 環檢測算法
+2. **找環的起始點**：在檢測到環後的進一步操作
+3. **鏈表分割**：將鏈表從中間分成兩部分
+4. **回文鏈表檢測**：找到中點後反轉後半部分
+
+#### 變體問題
+
+**找到第 n 個中間節點**：
+```typescript
+function nthMiddle(head: ListNode | null, n: number): ListNode | null {
+  // 快指針移動 n 步，慢指針移動 1 步
+  // 這樣快指針到末尾時，慢指針距離末尾 n 步
+}
+```
+
+**從末尾數第 k 個節點**：
+```typescript
+function kthFromEnd(head: ListNode | null, k: number): ListNode | null {
+  let fast = head;
+  let slow = head;
+  
+  // 快指針先移動 k 步
+  for (let i = 0; i < k; i++) {
+    if (!fast) return null;
+    fast = fast.next;
+  }
+  
+  // 兩個指針同時移動
+  while (fast) {
+    fast = fast.next;
+    slow = slow!.next;
+  }
+  
+  return slow;
+}
+```
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [141. Linked List Cycle](https://leetcode.com/problems/linked-list-cycle/)
+- [142. Linked List Cycle II](https://leetcode.com/problems/linked-list-cycle-ii/)
+- [19. Remove Nth Node From End of List](https://leetcode.com/problems/remove-nth-node-from-end-of-list/)

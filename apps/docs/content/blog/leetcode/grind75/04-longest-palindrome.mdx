@@ -1,0 +1,197 @@
+---
+title: Longest Palindrome
+description: Calculate longest palindrome length using Set for character pairing
+icon: Repeat
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Given a string of letters, calculate the length of the longest palindrome that can be built
+
+## 問題描述
+
+給定一個包含大小寫字母的字符串 `s`，返回通過這些字母構造成的 **最長的回文串** 的長度。
+
+在構造過程中，請注意 **區分大小寫**。比如 `"Aa"` 不能當做一個回文字符串。
+
+## 範例
+
+```
+輸入：s = "abccccdd"
+輸出：7
+解釋：我們可以構造的最長的回文串是"dccaccd"，它的長度是 7。
+
+輸入：s = "a"
+輸出：1
+解釋：最長回文串就是 "a"，長度為 1。
+```
+
+## 限制條件
+
+<Callout type="info">
+- `1 <= s.length <= 2000`
+- `s` 只包含小寫和/或大寫英文字母
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 理解回文串特性
+回文串可以有多個成對的字符，以及最多一個單獨的字符作為中心
+</Step>
+
+<Step>
+### 使用 Set 追蹤配對
+遇到重複字符時形成配對，單個字符等待配對
+</Step>
+
+<Step>
+### 計算最長長度
+配對字符數 × 2 + (有剩餘字符 ? 1 : 0)
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+/**
+ * 使用 Set 來計算最長回文字串長度
+ * 核心思想：
+ * 1. 當遇到重複字母時，代表可以組成一對，放在回文字串的兩邊
+ * 2. 最後如果還有剩餘字母，可以選一個當中心點
+ *
+ * 例如: "aabaa"
+ * 1. 遇到第一個 'a' -> 加入 Set -> [a]
+ * 2. 遇到第二個 'a' -> 找到一對! -> a[]a
+ * 3. 遇到 'b' -> 加入 Set -> a[b]a
+ * 4. 遇到第三個 'a' -> 加入 Set -> a[b]a[a]
+ * 5. 遇到第四個 'a' -> 找到一對! -> aabaa
+ */
+export function longestPalindrome(s: string): number {
+  // 用 Set 來追蹤未配對的字母
+  const unpairedLetters = new Set<string>();
+  // 記錄已配對的字母數量
+  let pairedCount = 0;
+
+  // 遍歷每個字母尋找配對
+  for (const letter of s) {
+    // 如果找到配對的字母
+    if (unpairedLetters.has(letter)) {
+      // 計數加 2 並移除已配對的字母
+      pairedCount += 2;
+      unpairedLetters.delete(letter);
+    }
+    // 如果是新字母，加入 Set 等待配對
+    else {
+      unpairedLetters.add(letter);
+    }
+  }
+
+  // 如果有剩餘未配對的字母，可以選一個當中心
+  return pairedCount + (unpairedLetters.size > 0 ? 1 : 0);
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { longestPalindrome } from './solution';
+
+describe('longest palindrome', () => {
+  it('應該處理基本案例', () => {
+    // 基本案例：有配對和中心點
+    expect(longestPalindrome('abccccdd')).toBe(7); // dccaccd
+    expect(longestPalindrome('aabaa')).toBe(5); // aabaa
+  });
+
+  it('應該處理只有一個字母的案例', () => {
+    expect(longestPalindrome('a')).toBe(1); // a
+    expect(longestPalindrome('A')).toBe(1); // A
+  });
+
+  it('應該處理大小寫混合的案例', () => {
+    expect(longestPalindrome('Aa')).toBe(1); // A 或 a
+    expect(longestPalindrome('AaAaAa')).toBe(5); // AaaaA 或 aAAAa
+  });
+
+  it('應該處理所有字母都可以配對的案例', () => {
+    expect(longestPalindrome('aaaa')).toBe(4); // aaaa
+    expect(longestPalindrome('cccc')).toBe(4); // cccc
+  });
+
+  it('應該處理空字串', () => {
+    expect(longestPalindrome('')).toBe(0);
+  });
+
+  it('應該處理複雜案例', () => {
+    // 多個不同的字母組合
+    expect(longestPalindrome('abccccddeeffggg')).toBe(13);
+    // 所有字母都不同
+    expect(longestPalindrome('abcdef')).toBe(1);
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### Set 配對方法
+
+這個解法的巧妙之處在於使用 Set 來追蹤未配對的字符。
+
+#### 算法邏輯
+
+1. **配對檢測**
+   - 如果字符已在 Set 中，表示找到配對
+   - 配對計數 +2，並從 Set 中移除該字符
+
+2. **新字符處理**
+   - 如果字符不在 Set 中，加入 Set 等待配對
+
+3. **最終計算**
+   - 配對的字符數 × 2
+   - 如果有剩餘未配對字符，可選一個作為中心 (+1)
+
+#### 複雜度分析
+- **時間複雜度**: O(n) - 遍歷字符串一次
+- **空間複雜度**: O(k) - k 為不同字符的數量，最多為 128 (ASCII)
+
+<Callout type="tip">
+關鍵理念：回文串的結構是對稱的，所以我們只需要計算能配對的字符數量，再考慮是否能有一個中心字符
+</Callout>
+
+#### 演算過程示例
+以 `s = "abccccdd"` 為例：
+
+| 步驟 | 字符 | Set 狀態 | 配對數 | 說明 |
+|------|------|----------|--------|------|
+| 1 | 'a' | {'a'} | 0 | 新字符 |
+| 2 | 'b' | {'a','b'} | 0 | 新字符 |
+| 3 | 'c' | {'a','b','c'} | 0 | 新字符 |
+| 4 | 'c' | {'a','b'} | 2 | 找到配對 |
+| 5 | 'c' | {'a','b','c'} | 2 | 新字符 |
+| 6 | 'c' | {'a','b'} | 4 | 找到配對 |
+| 7 | 'd' | {'a','b','d'} | 4 | 新字符 |
+| 8 | 'd' | {'a','b'} | 6 | 找到配對 |
+
+最終：配對數 6 + 剩餘字符 1 = 7
+
+#### 回文串構造示例
+- 配對: cc, cc, dd (6 個字符)
+- 中心: 'a' 或 'b' (1 個字符)
+- 可能的回文串: "dccaccd" 或 "dccbccd"
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [5. Longest Palindromic Substring](https://leetcode.com/problems/longest-palindromic-substring/)
+- [125. Valid Palindrome](https://leetcode.com/problems/valid-palindrome/)
+- [647. Palindromic Substrings](https://leetcode.com/problems/palindromic-substrings/)

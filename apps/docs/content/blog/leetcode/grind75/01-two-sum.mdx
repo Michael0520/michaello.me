@@ -1,0 +1,116 @@
+---
+title: Two Sum
+description: Find two numbers that add up to target using Hash Map - O(n) time complexity
+icon: Hash
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Find two numbers in an array that add up to a target value
+
+## 問題描述
+
+給定一個整數數組 `nums` 和一個整數目標值 `target`，請你在該數組中找出和為目標值 `target` 的那兩個整數，並返回它們的數組下標。
+
+你可以假設每種輸入只會對應一個答案。但是，數組中同一個元素在答案裡不能重複出現。
+
+你可以按任意順序返回答案。
+
+## 範例
+
+```
+輸入：nums = [2,7,11,15], target = 9
+輸出：[0,1]
+解釋：因為 nums[0] + nums[1] == 9 ，返回 [0, 1]
+```
+
+## 限制條件
+
+<Callout type="info">
+- `2 <= nums.length <= 10⁴`
+- `-10⁹ <= nums[i] <= 10⁹`
+- `-10⁹ <= target <= 10⁹`
+- **只會存在一個有效答案**
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 暴力解法 O(n²)
+對每個元素，遍歷數組的其餘部分來尋找它所對應的目標元素
+</Step>
+
+<Step>
+### Hash Map 解法 O(n) 
+使用 Hash Map 儲存已遍歷過的元素及其索引，查找目標元素的補數
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+export function twoSum(nums: number[], target: number): number[] {
+  const map = new Map<number, number>();
+
+  for (let i = 0; i < nums.length; i++) {
+    const complement = target - nums[i];
+    if (map.has(complement)) {
+      return [map.get(complement)!, i];
+    }
+    map.set(nums[i], i);
+  }
+
+  return [];
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { twoSum } from './solution';
+
+describe('Two Sum', () => {
+  it('should return indices of two numbers that add up to target', () => {
+    expect(twoSum([2, 7, 11, 15], 9)).toEqual([0, 1]);
+    expect(twoSum([3, 2, 4], 6)).toEqual([1, 2]);
+    expect(twoSum([3, 3], 6)).toEqual([0, 1]);
+  });
+
+  it('should handle no solution case', () => {
+    expect(twoSum([1, 2, 3], 7)).toEqual([]);
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### Hash Map 方法
+
+1. **建立 Hash Map**: 用於儲存數值和對應的索引
+2. **遍歷數組**: 對每個元素計算其補數 `complement = target - nums[i]`
+3. **檢查補數**: 如果補數存在於 Hash Map 中，返回兩個索引
+4. **儲存當前元素**: 將當前元素和索引加入 Hash Map
+
+### 複雜度分析
+- **時間複雜度**: O(n) - 只需遍歷數組一次
+- **空間複雜度**: O(n) - Hash Map 最多儲存 n 個元素
+
+<Callout type="tip">
+這個解法的關鍵在於邊遍歷邊查找，而不是先建立完整的 Hash Map 再查找
+</Callout>
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [15. 3Sum](https://leetcode.com/problems/3sum/)
+- [167. Two Sum II - Input Array Is Sorted](https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/)
+- [170. Two Sum III - Data structure design](https://leetcode.com/problems/two-sum-iii-data-structure-design/)

@@ -1,0 +1,201 @@
+---
+title: Add Binary
+description: Add two binary strings and return their sum in binary format
+icon: Plus
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Add two binary strings and return the sum as a binary string
+
+## 問題描述
+
+給你兩個二進制字符串 `a` 和 `b`，以二進制字符串的形式返回它們的和。
+
+## 範例
+
+```
+輸入: a = "11", b = "1"
+輸出: "100"
+
+輸入: a = "1010", b = "1011"
+輸出: "10101"
+```
+
+## 限制條件
+
+<Callout type="info">
+- `1 <= a.length, b.length <= 10⁴`
+- `a` 和 `b` 僅由字符 `'0'` 或 `'1'` 組成
+- 字符串如果不是 `"0"`，就不含前導零
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 模擬手工加法
+從最低位開始逐位相加，處理進位
+</Step>
+
+<Step>
+### 處理不同長度
+較短的字符串補 0 處理
+</Step>
+
+<Step>
+### 進位處理
+每位運算結果可能產生進位，需要傳遞到下一位
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+export function addBinary(a: string, b: string): string {
+  let carry = 0;
+  let result = '';
+  let i = a.length - 1;
+  let j = b.length - 1;
+
+  while (i >= 0 || j >= 0 || carry > 0) {
+    const digitA = i >= 0 ? Number.parseInt(a[i]) : 0;
+    const digitB = j >= 0 ? Number.parseInt(b[j]) : 0;
+
+    const sum = digitA + digitB + carry;
+    result = (sum % 2) + result;
+    carry = Math.floor(sum / 2);
+
+    i--;
+    j--;
+  }
+
+  return result;
+}
+
+export function addBinaryBigInt(a: string, b: string): string {
+  const aBin = `0b${a}`;
+  const bBin = `0b${b}`;
+
+  const sum = BigInt(aBin) + BigInt(bBin);
+  return sum.toString(2);
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { addBinary, addBinaryBigInt } from './solution';
+
+describe('67. Add Binary', () => {
+  const testCases = [
+    {
+      a: '11',
+      b: '1',
+      expected: '100',
+      description: 'Basic case: 11 + 1 = 100',
+    },
+    {
+      a: '1010',
+      b: '1011',
+      expected: '10101',
+      description: 'Longer numbers: 1010 + 1011 = 10101',
+    },
+    {
+      a: '0',
+      b: '0',
+      expected: '0',
+      description: 'Edge case: 0 + 0 = 0',
+    },
+    {
+      a: '1111',
+      b: '1111',
+      expected: '11110',
+      description: 'Multiple carries: 1111 + 1111 = 11110',
+    },
+    {
+      a: '10100000100100110110010000010101111011011001101110111111111101000000101111001110001111100001101',
+      b: '110101001011101110001111100110001010100001101011101010000011011011001011101111001100000011011110011',
+      expected: '110111101100010011000101110110100000011101000101011001000011011000001100011110011010010011000000000',
+      description: 'Very large numbers test',
+    },
+  ];
+
+  testCases.forEach(({ a, b, expected, description }) => {
+    it(description, () => {
+      expect(addBinary(a, b)).toBe(expected);
+    });
+  });
+
+  describe('bigInt Solution', () => {
+    testCases.forEach(({ a, b, expected, description }) => {
+      it(description, () => {
+        expect(addBinaryBigInt(a, b)).toBe(expected);
+      });
+    });
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### 逐位相加法
+
+這個問題本質上是模擬手工計算二進制加法。
+
+#### 算法步驟
+
+1. **初始化變數**
+   - `carry`: 進位
+   - `result`: 結果字符串
+   - `i`, `j`: 兩個字符串的指針
+
+2. **逐位相加**
+   - 從右到左處理每一位
+   - 計算當前位的和：`digitA + digitB + carry`
+   - 結果的當前位：`sum % 2`
+   - 新的進位：`Math.floor(sum / 2)`
+
+3. **處理不同長度**
+   - 當某個字符串處理完時，將對應位視為 0
+
+#### 複雜度分析
+- **時間複雜度**: O(max(m, n))，其中 m、n 分別是兩個字符串的長度
+- **空間複雜度**: O(max(m, n))，用於存儲結果字符串
+
+<Callout type="tip">
+進位的處理是關鍵：每次相加後，進位要麼是 0，要麼是 1
+</Callout>
+
+#### 演算過程示例
+以 `a = "11", b = "1"` 為例：
+
+| 步驟 | i | j | digitA | digitB | carry | sum | result |
+|------|---|---|--------|---------|-------|-----|--------|
+| 1 | 1 | 0 | 1 | 1 | 0 | 2 | "0" |
+| 2 | 0 | -1 | 1 | 0 | 1 | 2 | "00" |
+| 3 | -1 | -1 | 0 | 0 | 1 | 1 | "100" |
+
+#### BigInt 替代方案
+對於極大的數字，可以使用 BigInt 直接進行運算：
+```typescript
+const sum = BigInt(`0b${a}`) + BigInt(`0b${b}`);
+return sum.toString(2);
+```
+
+這種方法更簡潔，但可能不符合面試官期望的手工實現。
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [2. Add Two Numbers](https://leetcode.com/problems/add-two-numbers/)
+- [415. Add Strings](https://leetcode.com/problems/add-strings/)
+- [989. Add to Array-Form of Integer](https://leetcode.com/problems/add-to-array-form-of-integer/)

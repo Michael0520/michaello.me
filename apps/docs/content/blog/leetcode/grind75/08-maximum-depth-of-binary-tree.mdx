@@ -1,0 +1,242 @@
+---
+title: Maximum Depth of Binary Tree
+description: Find the maximum depth of a binary tree using recursive traversal
+icon: TreePine
+---
+
+import { Tabs, Tab } from 'fumadocs-ui/components/tabs';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Steps, Step } from 'fumadocs-ui/components/steps';
+
+> Find the maximum number of nodes along the longest path from root to leaf
+
+## 問題描述
+
+給定一個二叉樹 `root`，返回其最大深度。
+
+二叉樹的 **最大深度** 是指從根節點到最遠葉子節點的最長路徑上的節點數。
+
+## 範例
+
+```
+輸入：root = [3,9,20,null,null,15,7]
+輸出：3
+
+輸入：root = [1,null,2]
+輸出：2
+```
+
+## 限制條件
+
+<Callout type="info">
+- 樹中節點的數量在 `[0, 10⁴]` 範圍內
+- `-100 <= Node.val <= 100`
+</Callout>
+
+## 解題思路
+
+<Steps>
+
+<Step>
+### 遞歸分解
+樹的最大深度 = max(左子樹深度, 右子樹深度) + 1
+</Step>
+
+<Step>
+### 基礎情況
+空節點的深度為 0
+</Step>
+
+<Step>
+### 遞歸計算
+分別計算左右子樹深度，取最大值加 1
+</Step>
+
+</Steps>
+
+## 解決方案
+
+<Tabs>
+<Tab value="solution" label="TypeScript 解答">
+```typescript
+/**
+ * Definition for a binary tree node.
+ */
+export class TreeNode {
+  val: number;
+  left: TreeNode | null;
+  right: TreeNode | null;
+  constructor(val?: number, left?: TreeNode | null, right?: TreeNode | null) {
+    this.val = val === undefined ? 0 : val;
+    this.left = left === undefined ? null : left;
+    this.right = right === undefined ? null : right;
+  }
+}
+
+export function maxDepth(root: TreeNode | null): number {
+  // Base case: depth of empty node is 0
+  if (!root)
+    return 0;
+
+  // Recursively calculate depth of left and right subtrees
+  const leftDepth = maxDepth(root.left);
+  const rightDepth = maxDepth(root.right);
+
+  // Return the maximum depth + 1 (current node)
+  return Math.max(leftDepth, rightDepth) + 1;
+}
+```
+</Tab>
+
+<Tab value="test" label="測試案例">
+```typescript
+import { describe, expect, it } from 'vitest';
+import { maxDepth, TreeNode } from './solution';
+
+describe('104. Maximum Depth of Binary Tree', () => {
+  function createTree(values: (number | null)[]): TreeNode | null {
+    if (!values.length)
+      return null;
+
+    const root = new TreeNode(values[0] as number);
+    const queue = [root];
+    let i = 1;
+
+    while (queue.length && i < values.length) {
+      const node = queue.shift()!;
+
+      // Left child
+      if (i < values.length && values[i] !== null) {
+        node.left = new TreeNode(values[i] as number);
+        queue.push(node.left);
+      }
+      i++;
+
+      // Right child
+      if (i < values.length && values[i] !== null) {
+        node.right = new TreeNode(values[i] as number);
+        queue.push(node.right);
+      }
+      i++;
+    }
+
+    return root;
+  }
+
+  it('should handle example case 1', () => {
+    const root = createTree([3, 9, 20, null, null, 15, 7]);
+    expect(maxDepth(root)).toBe(3);
+  });
+
+  it('should handle example case 2', () => {
+    const root = createTree([1, null, 2]);
+    expect(maxDepth(root)).toBe(2);
+  });
+
+  it('should handle empty tree', () => {
+    expect(maxDepth(null)).toBe(0);
+  });
+
+  it('should handle single node', () => {
+    const root = createTree([1]);
+    expect(maxDepth(root)).toBe(1);
+  });
+
+  it('should handle complete binary tree', () => {
+    const root = createTree([1, 2, 3, 4, 5, 6, 7]);
+    expect(maxDepth(root)).toBe(3);
+  });
+});
+```
+</Tab>
+
+<Tab value="explanation" label="演算法解析">
+### 深度優先搜索 (DFS)
+
+這是樹遍歷問題的經典應用，使用遞歸的深度優先搜索。
+
+#### 核心思想
+
+樹的深度等於左右子樹中較深的那個深度加 1（當前節點）。
+
+#### 遞歸結構
+
+1. **基礎情況**：空節點深度為 0
+2. **遞歸情況**：`max(左子樹深度, 右子樹深度) + 1`
+
+#### 複雜度分析
+- **時間複雜度**: O(n) - 需要訪問每個節點一次
+- **空間複雜度**: O(h) - h 為樹的高度，遞歸調用棧的深度
+
+<Callout type="tip">
+在最壞情況下（完全不平衡的樹），空間複雜度為 O(n)；在最好情況下（完全平衡的樹），空間複雜度為 O(log n)
+</Callout>
+
+#### 執行過程示例
+
+以樹 `[3,9,20,null,null,15,7]` 為例：
+
+```
+    3
+   / \
+  9   20
+     /  \
+    15   7
+```
+
+**遞歸調用過程**：
+1. `maxDepth(3)` = max(`maxDepth(9)`, `maxDepth(20)`) + 1
+2. `maxDepth(9)` = max(`maxDepth(null)`, `maxDepth(null)`) + 1 = 0 + 0 + 1 = 1
+3. `maxDepth(20)` = max(`maxDepth(15)`, `maxDepth(7)`) + 1
+4. `maxDepth(15)` = 1, `maxDepth(7)` = 1
+5. `maxDepth(20)` = max(1, 1) + 1 = 2
+6. `maxDepth(3)` = max(1, 2) + 1 = 3
+
+#### 迭代版本 (BFS)
+
+```typescript
+function maxDepthIterative(root: TreeNode | null): number {
+  if (!root) return 0;
+  
+  const queue: TreeNode[] = [root];
+  let depth = 0;
+  
+  while (queue.length > 0) {
+    const levelSize = queue.length;
+    
+    for (let i = 0; i < levelSize; i++) {
+      const node = queue.shift()!;
+      
+      if (node.left) queue.push(node.left);
+      if (node.right) queue.push(node.right);
+    }
+    
+    depth++;
+  }
+  
+  return depth;
+}
+```
+
+這個版本使用廣度優先搜索，逐層遍歷樹。
+
+#### 實際應用
+
+1. **文件系統**：計算目錄的最大嵌套深度
+2. **組織結構**：計算公司層級結構的深度
+3. **表達式樹**：計算數學表達式的嵌套層數
+4. **決策樹**：分析決策樹的複雜度
+
+#### 相關變體
+
+1. **最小深度**：到最近葉子節點的距離
+2. **平衡檢查**：檢查樹是否平衡（左右子樹高度差 ≤ 1）
+3. **直徑計算**：樹中任意兩節點間的最長路徑
+</Tab>
+</Tabs>
+
+## 相關題目
+
+- [111. Minimum Depth of Binary Tree](https://leetcode.com/problems/minimum-depth-of-binary-tree/)
+- [110. Balanced Binary Tree](https://leetcode.com/problems/balanced-binary-tree/)
+- [543. Diameter of Binary Tree](https://leetcode.com/problems/diameter-of-binary-tree/)
