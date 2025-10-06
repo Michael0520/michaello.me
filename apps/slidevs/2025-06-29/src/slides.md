@@ -19,7 +19,6 @@ Today I'm excited to share with you an important topic in modern frontend develo
 layout: intro
 class: pl-40
 glowSeed: 14
-
 ---
 # Michael <sup opacity-80 font-hand text-4xl>ming</sup>
 
@@ -52,7 +51,6 @@ Hi, I'm Michael, focused on frontend architecture
 ---
 layout: cover
 title: MonoRepo Performance Revolution
-
 ---
 <h1 flex="~ col">
 <div text-2xl origin-top-left transition duration-500 :class="$clicks <= 1 ? 'scale-150' : 'op50'">
@@ -82,7 +80,6 @@ layout: center
 class: text-center
 glowX: 50
 glowY: 100
-
 ---
 <h1 important-text-5xl>What's the Pain Point?</h1>
 
@@ -108,7 +105,6 @@ glow: right
 class: text-center
 clicks: 6
 title: Complexity Explosion
-
 ---
 <div transition duration-800 :class="$clicks < 2 ? 'translate-y-45' : ''" relative>
 
@@ -195,7 +191,6 @@ title: Complexity Explosion
 class: text-2xl
 glow: right
 title: Make Development Easier
-
 ---
 # Make Development <span font-hand text-green scale-110 ml1 inline-block>Easier!</span>
 
@@ -255,7 +250,6 @@ title: Make Development Easier
 class: text-2xl
 glow: right
 title: MonoRepo Advantages
-
 ---
 # MonoRepo Advantages{.text-green}
 
@@ -281,7 +275,6 @@ title: MonoRepo Advantages
 layout: center
 class: text-center
 title: Integration Levels
-
 ---
 <h1 important-text-5xl>Integration Levels</h1>
 
@@ -294,8 +287,8 @@ MonoRepo 的漸進式整合提供不同的層級
 -->
 
 ---
-## glow: bottom
-
+glow: bottom
+---
 # MonoRepo Tool Selection
 
 <div v-click text-white:50 mt5>
@@ -355,7 +348,6 @@ glowX: 50
 glowY: 130
 class: flex flex-col items-center justify-center
 title: void-zero
-
 ---
 <div v-click="1" text-center absolute left-1 right-1 transition-all duration-400 op75 ease-in-out :class="$clicks === 1 ? 'scale-250 bottom-50%' : 'bottom-10'">
 Void Zero Ecosystem
@@ -382,7 +374,6 @@ glowX: 50
 glowY: 130
 class: flex flex-col items-center justify-center
 title: OXC
-
 ---
 <div text-center absolute left-1 right-1 transition-all duration-400 op75 ease-in-out :class="$clicks === 0 ? 'scale-250 bottom-50%' : 'bottom-5'">
 Oxidation Compiler
@@ -405,8 +396,8 @@ OXC 的核心優勢是：
 -->
 
 ---
-## glow: bottom
-
+glow: bottom
+---
 # Performance Optimization
 
 <div v-click text-white:50 mt3 mb6>
@@ -464,7 +455,6 @@ Shopify：500 萬行程式碼，從 75 分鐘降到 10 秒。 Airbnb：126,000+ 
 ---
 class: grid grid-cols-[auto_640px] gap-4 items-center justify-center
 glow: left
-
 ---
 <div flex="~ col gap-4">
 <div text-4xl>Start Immediately</div>
@@ -508,7 +498,6 @@ ref: <a href="https://github.com/oxc-project/eslint-plugin-oxlint" target="_blan
 ---
 class: flex flex-col gap-6 items-center justify-center
 glow: right
-
 ---
 <div flex="~ col gap-4" text-right>
 <div text-4xl text-center>With Nx CLI Affected</div>
@@ -538,7 +527,6 @@ Nx Affected 的智慧優化：
 ---
 layout: center
 class: text-center
-
 ---
 <h1 important-text-5xl>Grow With Your Project</h1>
 
@@ -551,8 +539,8 @@ class: text-center
 -->
 
 ---
-## glow: right
-
+glow: right
+---
 # Progressive Migration Strategy
 
 <div flex="~ col gap-1" pt6>
@@ -604,7 +592,6 @@ glow: right
 class: text-center
 clicks: 3
 title: Rational Thinking in Frontend Infra
-
 ---
 <div text-3xl font-bold mb-4 v-motion :initial="{ opacity: 0, y: -20 }" :enter="{ opacity: 1, y: 0, transition: { duration: 800 } }">Rational Thinking in Frontend Infra</div>
 
@@ -649,7 +636,6 @@ layout: intro
 class: text-center pb-5
 glowX: 50
 glowY: 120
-
 ---
 # Thank You! {.font-hand.italic}
 
