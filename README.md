@@ -1,277 +1,228 @@
-# Milo Me - Monorepo Workspace
+# Milo Me - Personal Website Monorepo
 
-A modern monorepo workspace built with Nx, Next.js 15, Tailwind CSS v4, and shadcn/ui.
+A modern Nx monorepo for [michaello.me](https://michaello.me) using Next.js Multi-Zones architecture.
 
-## Project Structure
+## 🏗️ Architecture
+
+### Multi-Zones Design
+
+This monorepo serves **multiple independent Next.js applications** under a **single domain** using Next.js Multi-Zones pattern.
+
+```
+michaello.me/              → blog app (Main Zone)
+michaello.me/posts/*       → blog app
+michaello.me/projects      → blog app
+michaello.me/talks         → blog app
+
+michaello.me/lab           → lab-home app (Rewrite Zone)
+michaello.me/lab/*         → lab-home app
+
+michaello.me/slides        → slidevs app (Rewrite Zone)
+michaello.me/slides/*      → slidevs app
+```
+
+**How it works:**
+
+- `blog` app is the **main zone** (no basePath)
+- `lab-home` and `slidevs` apps have their own `basePath`
+- Main zone's `next.config.js` contains `rewrites()` to route `/lab/*` and `/slides/*` to their Vercel deployments
+- Each app is **deployed separately** on Vercel
+- User sees **one unified domain**
+
+### Project Structure
 
 ```
 milo-me-new/
 ├── apps/
-│   ├── side-projects/    # Side projects showcase
-│   ├── slidevs/          # Slides/presentations
-│   └── docs/             # Documentation & Blog (Fumadocs)
-├── libs/
-│   └── shared-ui/        # Shared UI components (shadcn/ui)
-├── .husky/               # Git hooks
-└── vercel.json           # Vercel deployment config
+│   ├── blog/                      # Main Zone (michaello.me)
+│   │   ├── src/app/
+│   │   │   ├── page.tsx          # Homepage (blog posts list)
+│   │   │   ├── posts/[[...slug]]/  # Blog posts (Fumadocs)
+│   │   │   ├── projects/         # Projects page
+│   │   │   └── talks/            # Talks page
+│   │   ├── content/posts/        # MDX blog content
+│   │   │   ├── frontend/
+│   │   │   ├── backend/
+│   │   │   ├── leetcode/
+│   │   │   └── tech-talk/
+│   │   └── next.config.js        # ⭐ Multi-Zones rewrites config
+│   │
+│   ├── lab/home/                 # Lab Zone (michaello.me/lab)
+│   │   ├── src/app/page.tsx     # Lab projects list
+│   │   └── next.config.js        # basePath: '/lab'
+│   │
+│   └── slidevs/                  # Slides Zone (michaello.me/slides)
+│       ├── 2025-06-29/           # Date-organized presentations
+│       │   └── src/slides.md
+│       └── next.config.js        # basePath: '/slides'
+│
+└── libs/
+    ├── site-config/              # Shared site metadata
+    │   └── src/
+    │       ├── index.ts          # Author, social, analytics config
+    │       └── components/       # GoogleAnalytics, PostHog
+    └── shared-ui/                # Shared UI components
+        └── src/components/ui/    # shadcn/ui components
 ```
 
-## Tech Stack
+### Key Architecture Principles
 
-- **Monorepo**: Nx 21.6.3
-- **Framework**: Next.js 15.3.0 (App Router)
-- **UI Library**: React 19.0.0
-- **Styling**: Tailwind CSS v4.0.0
-- **Components**: shadcn/ui
-- **Documentation**: Fumadocs v15
-- **Package Manager**: pnpm
-- **Type Safety**: TypeScript 5.9
-- **Linting**: ESLint 9 + Prettier
-- **Git Hooks**: Husky + lint-staged + commitlint
+1. **Independent Deployment**: Each app has its own Vercel project
+2. **Shared Libraries**: `site-config` and `shared-ui` are shared via Nx workspace
+3. **Type Safety**: TypeScript strict mode across all apps
+4. **Zero-Config Styling**: Tailwind CSS v4 (no config file needed)
+5. **Content-Driven**: Blog uses Fumadocs MDX loader with static generation
 
-## Getting Started
+## 🚀 Tech Stack
 
-### Prerequisites
+| Layer               | Technology                        |
+| ------------------- | --------------------------------- |
+| **Monorepo**        | Nx 21.6.3                         |
+| **Framework**       | Next.js 15.3.0 (App Router)       |
+| **Runtime**         | React 19.0.0                      |
+| **Language**        | TypeScript 5.9.2                  |
+| **Styling**         | Tailwind CSS v4.0.0 (zero-config) |
+| **Documentation**   | Fumadocs v15.8.3                  |
+| **Presentations**   | Slidev v51.8.1 (Vue 3)            |
+| **Components**      | shadcn/ui                         |
+| **Package Manager** | pnpm                              |
+| **Deployment**      | Vercel (Multi-Zones)              |
 
-- Node.js 24+
-- pnpm 10+
+## 🌐 Deployment Architecture
 
-### Installation
+Each app is deployed as a **separate Vercel project**:
+
+| App          | Vercel Project       | Domain         | Build Command                   | Output Dir            |
+| ------------ | -------------------- | -------------- | ------------------------------- | --------------------- |
+| **blog**     | `michaello-blog`     | `michaello.me` | `pnpm nx build blog --prod`     | `apps/blog/.next`     |
+| **lab-home** | `michaello-lab-home` | (via rewrite)  | `pnpm nx build lab-home --prod` | `apps/lab/home/.next` |
+| **slidevs**  | `michaello-slides`   | (via rewrite)  | `pnpm nx build slidevs --prod`  | `apps/slidevs/.next`  |
+
+**Multi-Zones Configuration** (`apps/blog/next.config.js`):
+
+```javascript
+async rewrites() {
+  return [
+    {
+      source: '/lab',
+      destination: 'https://michaello-lab-home.vercel.app/lab'
+    },
+    {
+      source: '/lab/:path*',
+      destination: 'https://michaello-lab-home.vercel.app/lab/:path*'
+    },
+    {
+      source: '/slides',
+      destination: 'https://michaello-slides.vercel.app/slides'
+    },
+    {
+      source: '/slides/:path*',
+      destination: 'https://michaello-slides.vercel.app/slides/:path*'
+    }
+  ]
+}
+```
+
+**Note**: Update Vercel URLs after deploying `lab-home` and `slidevs` projects.
+
+## 🚦 Quick Start
 
 ```bash
+# Install dependencies
 pnpm install
-```
 
-### Development
+# Development
+pnpm dev                    # All apps
+pnpm nx dev blog            # Specific app
+pnpm nx dev lab-home
 
-Run all apps in development mode:
+# Production build
+pnpm build                  # All apps
+pnpm nx build blog --prod   # Specific app
 
-```bash
-pnpm dev
-```
-
-Run specific app:
-
-```bash
-pnpm nx dev side-projects
-pnpm nx dev slidevs
-pnpm nx dev docs
-```
-
-### Building
-
-Build all apps:
-
-```bash
-pnpm build
-```
-
-Build specific app:
-
-```bash
-pnpm nx build side-projects --prod
-```
-
-## Code Quality
-
-### Linting
-
-```bash
+# Code quality
 pnpm lint
-```
-
-### Formatting
-
-```bash
-# Format all files
 pnpm format
-
-# Check formatting
-pnpm format:check
-```
-
-### Type Checking
-
-```bash
 pnpm type-check
 ```
 
-## Git Commit Convention
+## 📊 Data Flow
 
-This project follows conventional commits with custom scope rules:
+```mermaid
+graph TD
+    User[User Request] --> DNS[michaello.me]
+    DNS --> Vercel[Vercel Edge Network]
 
-### Format
+    Vercel --> Blog{Path Match}
 
-```
-<type>(<scope>): <description>
+    Blog -->|/| BlogApp[Blog App<br/>Main Zone]
+    Blog -->|/posts/*| BlogApp
+    Blog -->|/projects| BlogApp
+    Blog -->|/talks| BlogApp
 
-[optional body]
+    Blog -->|/lab*| Rewrite1[Rewrite]
+    Rewrite1 --> LabApp[Lab Home App<br/>Separate Deployment]
 
-[optional footer]
-```
+    Blog -->|/slides*| Rewrite2[Rewrite]
+    Rewrite2 --> SlidesApp[Slidevs App<br/>Separate Deployment]
 
-### Types
+    BlogApp --> SharedConfig[site-config lib]
+    LabApp --> SharedConfig
+    SlidesApp --> SharedConfig
 
-- `feat`: New features
-- `fix`: Bug fixes
-- `refactor`: Code refactoring
-- `test`: Testing changes
-- `docs`: Documentation
-- `chore`: Maintenance tasks
-- `perf`: Performance improvements
-- `style`: Code style changes
-- `build`: Build system changes
-- `ci`: CI/CD changes
-
-### Scopes
-
-- `side-projects`: Side projects app
-- `slidevs`: Slides app
-- `docs`: Documentation & Blog app
-- `shared-ui`: Shared UI library
-- `workspace`: Workspace-level changes
-- `*`: Multiple apps/libs
-
-### Examples
-
-```bash
-git commit -m "feat(side-projects): add project showcase grid"
-git commit -m "feat(docs): add new blog post about React"
-git commit -m "refactor(shared-ui): extract Button component"
-git commit -m "chore(workspace): update dependencies"
+    BlogApp --> SharedUI[shared-ui lib]
+    LabApp --> SharedUI
 ```
 
-### Automated Checks
+## 📦 Shared Libraries
 
-- **Pre-commit**: Runs lint-staged (ESLint + Prettier)
-- **Commit-msg**: Validates commit message format
+### `site-config`
 
-## Deployment
+Centralized site configuration for all apps:
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions.
+```typescript
+import { siteConfig } from '@milo-me/site-config';
 
-### Quick Deploy to Vercel
-
-Each app needs to be deployed as a separate Vercel project:
-
-1. Import your repository to Vercel
-2. For each app, create a new project with:
-   - **Root Directory**: `apps/<app-name>`
-   - **Build Command**: `cd ../.. && pnpm nx build <app-name> --prod`
-   - **Output Directory**: `.next`
-
-## Adding shadcn/ui Components
-
-```bash
-# Add a component to shared-ui
-pnpm dlx shadcn@latest add button
-
-# Components will be added to libs/shared-ui/src/components/ui/
+siteConfig.author; // { name, url }
+siteConfig.site; // { name, title, description, url }
+siteConfig.social; // { github, linkedin, rss }
+siteConfig.analytics; // { googleAnalyticsId, posthogApiKey }
 ```
 
-## Project Features
+### `shared-ui`
 
-- ✅ Nx integrated monorepo
-- ✅ Next.js 15 with App Router
-- ✅ React 19
-- ✅ Tailwind CSS v4 (zero-config)
-- ✅ shadcn/ui component library
-- ✅ Fumadocs for documentation & blog
-- ✅ TypeScript strict mode
-- ✅ ESLint + Prettier
-- ✅ Husky git hooks
-- ✅ Conventional commits
-- ✅ lint-staged
-- ✅ Vercel-ready deployment config
-- ✅ Shared UI library architecture
+Shared UI components (shadcn/ui):
+
+```typescript
+import { Button, Card } from '@milo-me/shared-ui';
+```
+
+## 🎯 Design Decisions
+
+| Decision                      | Rationale                                                           |
+| ----------------------------- | ------------------------------------------------------------------- |
+| **Multi-Zones over Monolith** | Independent scaling, deployment, and tech stack per app             |
+| **Nx Monorepo**               | Code sharing, unified tooling, dependency graph                     |
+| **Separate Vercel Projects**  | Isolated deployments, independent CI/CD pipelines                   |
+| **Tailwind CSS v4**           | Zero-config, faster builds, better DX                               |
+| **Fumadocs**                  | MDX-first, type-safe, excellent DX for documentation                |
+| **Slidev**                    | Markdown-based slides with Vue 3, code highlighting, presenter mode |
+
+## 📚 Documentation
+
+- **[CLAUDE.md](./CLAUDE.md)** - Complete development guide for AI assistants
+  - Commit conventions
+  - Development patterns (RADIO + TDD + DDD)
+  - Detailed build/deployment instructions
+
+## 🔗 References
+
+- [Next.js Multi-Zones](https://nextjs.org/docs/advanced-features/multi-zones)
+- [Nx Monorepo](https://nx.dev)
+- [Fumadocs](https://fumadocs.vercel.app)
+- [Tailwind CSS v4](https://tailwindcss.com/blog/tailwindcss-v4-beta)
 
 ---
 
-## Run tasks
-
-To run tasks with Nx use:
-
-```sh
-npx nx <target> <project-name>
-```
-
-For example:
-
-```sh
-npx nx build myproject
-```
-
-These targets are either [inferred automatically](https://nx.dev/concepts/inferred-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) or defined in the `project.json` or `package.json` files.
-
-[More about running tasks in the docs &raquo;](https://nx.dev/features/run-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Add new projects
-
-While you could add new projects to your workspace manually, you might want to leverage [Nx plugins](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) and their [code generation](https://nx.dev/features/generate-code?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) feature.
-
-To install a new plugin you can use the `nx add` command. Here's an example of adding the React plugin:
-```sh
-npx nx add @nx/react
-```
-
-Use the plugin's generator to create new projects. For example, to create a new React app or library:
-
-```sh
-# Generate an app
-npx nx g @nx/react:app demo
-
-# Generate a library
-npx nx g @nx/react:lib some-lib
-```
-
-You can use `npx nx list` to get a list of installed plugins. Then, run `npx nx list <plugin-name>` to learn about more specific capabilities of a particular plugin. Alternatively, [install Nx Console](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) to browse plugins and generators in your IDE.
-
-[Learn more about Nx plugins &raquo;](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) | [Browse the plugin registry &raquo;](https://nx.dev/plugin-registry?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Set up CI!
-
-### Step 1
-
-To connect to Nx Cloud, run the following command:
-
-```sh
-npx nx connect
-```
-
-Connecting to Nx Cloud ensures a [fast and scalable CI](https://nx.dev/ci/intro/why-nx-cloud?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects) pipeline. It includes features such as:
-
-- [Remote caching](https://nx.dev/ci/features/remote-cache?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task distribution across multiple machines](https://nx.dev/ci/features/distribute-task-execution?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Automated e2e test splitting](https://nx.dev/ci/features/split-e2e-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Task flakiness detection and rerunning](https://nx.dev/ci/features/flaky-tasks?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-### Step 2
-
-Use the following command to configure a CI workflow for your workspace:
-
-```sh
-npx nx g ci-workflow
-```
-
-[Learn more about Nx on CI](https://nx.dev/ci/intro/ci-with-nx#ready-get-started-with-your-provider?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Install Nx Console
-
-Nx Console is an editor extension that enriches your developer experience. It lets you run tasks, generate code, and improves code autocompletion in your IDE. It is available for VSCode and IntelliJ.
-
-[Install Nx Console &raquo;](https://nx.dev/getting-started/editor-setup?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-## Useful links
-
-Learn more:
-
-- [Learn more about this workspace setup](https://nx.dev/getting-started/intro#learn-nx?utm_source=nx_project&amp;utm_medium=readme&amp;utm_campaign=nx_projects)
-- [Learn about Nx on CI](https://nx.dev/ci/intro/ci-with-nx?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [Releasing Packages with Nx release](https://nx.dev/features/manage-releases?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-- [What are Nx plugins?](https://nx.dev/concepts/nx-plugins?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
-
-And join the Nx community:
-- [Discord](https://go.nx.dev/community)
-- [Follow us on X](https://twitter.com/nxdevtools) or [LinkedIn](https://www.linkedin.com/company/nrwl)
-- [Our Youtube channel](https://www.youtube.com/@nxdevtools)
-- [Our blog](https://nx.dev/blog?utm_source=nx_project&utm_medium=readme&utm_campaign=nx_projects)
+**License**: Private
+**Last Updated**: 2025-10-06
