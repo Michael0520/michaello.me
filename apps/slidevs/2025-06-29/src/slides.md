@@ -11,19 +11,16 @@ vitePlugin:
   icons:
     compiler: vue3
 ---
-
 <!--
 Today I'm excited to share with you an important topic in modern frontend development
 -->
 
 ---
-
 layout: intro
 class: pl-40
 glowSeed: 14
 
 ---
-
 # Michael <sup opacity-80 font-hand text-4xl>ming</sup>
 
 <div class="[&>*]:important-leading-10 opacity-90">
@@ -53,12 +50,10 @@ Hi, I'm Michael, focused on frontend architecture
 -->
 
 ---
-
 layout: cover
 title: MonoRepo Performance Revolution
 
 ---
-
 <h1 flex="~ col">
 <div text-2xl origin-top-left transition duration-500 :class="$clicks <= 1 ? 'scale-150' : 'op50'">
   <span>MonoRepo - </span>
@@ -83,14 +78,12 @@ title: MonoRepo Performance Revolution
 -->
 
 ---
-
 layout: center
 class: text-center
 glowX: 50
 glowY: 100
 
 ---
-
 <h1 important-text-5xl>What's the Pain Point?</h1>
 
 <div text-white:50 text-2xl leading-10>
@@ -111,14 +104,12 @@ When you want to create a PR, but have to wait <span text-yellow2 italic v-mark.
 -->
 
 ---
-
 glow: right
 class: text-center
 clicks: 6
 title: Complexity Explosion
 
 ---
-
 <div transition duration-800 :class="$clicks < 2 ? 'translate-y-45' : ''" relative>
 
 # Complexity <span v-mark.linethrough.red.delay200="{at:1,roughness:6,seed:146}" transition inline-block :class="$clicks >= 1 ? 'op50' : ''">Growth</span>
@@ -201,13 +192,11 @@ title: Complexity Explosion
 -->
 
 ---
-
 class: text-2xl
 glow: right
 title: Make Development Easier
 
 ---
-
 # Make Development <span font-hand text-green scale-110 ml1 inline-block>Easier!</span>
 
 <div flex="~ gap-2 items-center" mt-15>
@@ -263,13 +252,11 @@ title: Make Development Easier
 -->
 
 ---
-
 class: text-2xl
 glow: right
 title: MonoRepo Advantages
 
 ---
-
 # MonoRepo Advantages{.text-green}
 
 <div pt3 />
@@ -291,13 +278,11 @@ title: MonoRepo Advantages
 -->
 
 ---
-
 layout: center
 class: text-center
 title: Integration Levels
 
 ---
-
 <h1 important-text-5xl>Integration Levels</h1>
 
 <h3 v-click text-white:50>Cover different scenarios, coexist with other technologies, <span text-1.4em font-hand text-blue v-mark.highlight.delay400="{at:1,color:'#60a5fa20'}">easy to adopt</span></h3>
@@ -309,7 +294,6 @@ MonoRepo 的漸進式整合提供不同的層級
 -->
 
 ---
-
 ## glow: bottom
 
 # MonoRepo Tool Selection
@@ -367,14 +351,12 @@ pnpm Workspaces 適用於輕量級專案（3-5 人），提供原生 MonoRepo �
 -->
 
 ---
-
 glowX: 50
 glowY: 130
 class: flex flex-col items-center justify-center
 title: void-zero
 
 ---
-
 <div v-click="1" text-center absolute left-1 right-1 transition-all duration-400 op75 ease-in-out :class="$clicks === 1 ? 'scale-250 bottom-50%' : 'bottom-10'">
 Void Zero Ecosystem
 </div>
@@ -396,14 +378,12 @@ Oxlint 只是 Oxidation Compiler 計劃中八個 JavaScript 工具之一，該�
 -->
 
 ---
-
 glowX: 50
 glowY: 130
 class: flex flex-col items-center justify-center
 title: OXC
 
 ---
-
 <div text-center absolute left-1 right-1 transition-all duration-400 op75 ease-in-out :class="$clicks === 0 ? 'scale-250 bottom-50%' : 'bottom-5'">
 Oxidation Compiler
 </div>
@@ -425,7 +405,6 @@ OXC 的核心優勢是：
 -->
 
 ---
-
 ## glow: bottom
 
 # Performance Optimization
@@ -483,12 +462,10 @@ Shopify：500 萬行程式碼，從 75 分鐘降到 10 秒。 Airbnb：126,000+ 
 -->
 
 ---
-
 class: grid grid-cols-[auto_640px] gap-4 items-center justify-center
 glow: left
 
 ---
-
 <div flex="~ col gap-4">
 <div text-4xl>Start Immediately</div>
 <div op50 v-click>Zero risk, high reward<br>performance boost</div>
@@ -529,12 +506,10 @@ ref: <a href="https://github.com/oxc-project/eslint-plugin-oxlint" target="_blan
 -->
 
 ---
-
 class: flex flex-col gap-6 items-center justify-center
 glow: right
 
 ---
-
 <div flex="~ col gap-4" text-right>
 <div text-4xl text-center>With Nx CLI Affected</div>
 <div op50 v-click="1">Smart dependency analysis for maximum optimization</div>
@@ -561,12 +536,10 @@ Nx Affected 的智慧優化：
 -->
 
 ---
-
 layout: center
 class: text-center
 
 ---
-
 <h1 important-text-5xl>Grow With Your Project</h1>
 
 <h3 v-click><span op50>Providing</span><span text-lime font-hand text-4xl v-mark.underline.lime.delay400="1"> progressive paths </span><span op50> for concepts and features</span></h3>
@@ -578,7 +551,6 @@ class: text-center
 -->
 
 ---
-
 ## glow: right
 
 # Progressive Migration Strategy
@@ -628,14 +600,12 @@ Progressive <span flex="inline gap-1 items-center" text-rose translate-y-0.6><di
 -->
 
 ---
-
 glow: right
 class: text-center
 clicks: 3
 title: Rational Thinking in Frontend Infra
 
 ---
-
 <div text-3xl font-bold mb-4 v-motion :initial="{ opacity: 0, y: -20 }" :enter="{ opacity: 1, y: 0, transition: { duration: 800 } }">Rational Thinking in Frontend Infra</div>
 
 <div left-70 top-15 relative transition duration-400 forward:delay-600 v-click="1">
@@ -675,14 +645,12 @@ Frontend Infra 的本質是軟體架構設計[1]，
 -->
 
 ---
-
 layout: intro
 class: text-center pb-5
 glowX: 50
 glowY: 120
 
 ---
-
 # Thank You! {.font-hand.italic}
 
 Slides available at [michael.dev](https://www.michaello.me/)

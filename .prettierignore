@@ -3,3 +3,6 @@
 /coverage
 /.nx/cache
 /.nx/workspace-data
+
+# Slidev presentations (Slidev has strict frontmatter formatting requirements)
+apps/slidevs/**/slides.md
