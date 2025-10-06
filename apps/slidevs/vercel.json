@@ -1,17 +1,8 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
-  "version": 2,
   "buildCommand": "pnpm nx build slidevs",
+  "outputDirectory": "apps/slidevs/dist",
   "installCommand": "pnpm install",
-  "outputDirectory": "apps/slidevs/dist/2025-06-29",
-  "framework": null,
-  "routes": [
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1/index.html"
-    }
-  ]
+  "cleanUrls": true,
+  "trailingSlash": true
 }
