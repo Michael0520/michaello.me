@@ -22,6 +22,7 @@ export default {
       'always',
       [
         'blog',
+        'portfolio',
         'lab-home',
         'lab-calculator',
         'lab-todo',
