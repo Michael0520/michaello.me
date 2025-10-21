@@ -3,8 +3,6 @@ import { RssIcon } from 'lucide-react';
 import { SITE_INFO } from '@/config/site';
 import { cn } from '@/lib/utils';
 
-import { Icons } from './icons';
-
 export function SiteFooter() {
   return (
     <footer className="max-w-screen overflow-x-hidden px-2">
@@ -52,21 +50,6 @@ export function SiteFooter() {
             >
               <RssIcon className="size-4" />
               <span className="sr-only">RSS</span>
-            </a>
-
-            <Separator />
-
-            <a
-              className="flex text-muted-foreground transition-colors hover:text-foreground"
-              href={
-                process.env.NEXT_PUBLIC_DMCA_URL ||
-                'https://www.dmca.com/ProtectionPro.aspx'
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <Icons.dmca className="h-5 w-auto" />
-              <span className="sr-only">DMCA.com Protection Status</span>
             </a>
           </div>
         </div>
