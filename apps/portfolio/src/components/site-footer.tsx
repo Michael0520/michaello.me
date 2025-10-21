@@ -1,6 +1,6 @@
 import { RssIcon } from 'lucide-react';
 
-import { SITE_INFO, SOURCE_CODE_GITHUB_URL } from '@/config/site';
+import { SITE_INFO } from '@/config/site';
 import { cn } from '@/lib/utils';
 
 import { Icons } from './icons';
@@ -10,29 +10,20 @@ export function SiteFooter() {
     <footer className="max-w-screen overflow-x-hidden px-2">
       <div className="screen-line-before mx-auto border-x border-edge pt-4 md:max-w-3xl">
         <p className="mb-1 px-4 text-center font-mono text-sm text-balance text-muted-foreground">
-          Inspired by tailwindcss.com & ui.shadcn.com
+          Built with Next.js, shadcn/ui & Tailwind CSS
         </p>
 
         <p className="mb-4 px-4 text-center font-mono text-sm text-balance text-muted-foreground">
-          Built by{' '}
+          Made with ❤️ by{' '}
           <a
             className="link"
-            href="https://x.com/iamncdai"
+            href={SITE_INFO.url}
             target="_blank"
             rel="noopener"
           >
-            ncdai
+            Michael Lo
           </a>
-          . The source code is available on{' '}
-          <a
-            className="link"
-            href={SOURCE_CODE_GITHUB_URL}
-            target="_blank"
-            rel="noopener"
-          >
-            GitHub
-          </a>
-          .
+          {' | '}© {new Date().getFullYear()}
         </p>
 
         <div
