@@ -1,27 +1,33 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
+import type { Root } from 'mdast';
 import { visit } from 'unist-util-visit';
 
 import { Index } from '@/__registry__/index';
-import type { UnistNode, UnistTree } from '@/types/unist';
+import type { UnistNode } from '@/types/unist';
 
 export function remarkComponent() {
-  return (tree: UnistTree) => {
-    visit(tree, (node: UnistNode, index, parent) => {
+  return (tree: Root) => {
+    visit(tree, (node, index, parent) => {
+      // Type guard to ensure node has required properties
+      if (!('name' in node)) {
+        return;
+      }
+
+      const typedNode = node as UnistNode;
       // src prop overrides both name and fileName.
       const { value: srcPath } =
-        (getNodeAttributeByName(node, 'src') as {
+        (getNodeAttributeByName(typedNode, 'src') as {
           name: string;
           value?: string;
           type?: string;
         }) || {};
 
-      if (node.name === 'ComponentSource') {
-        const name = getNodeAttributeByName(node, 'name')?.value as string;
-        const fileName = getNodeAttributeByName(node, 'fileName')?.value as
-          | string
-          | undefined;
+      if (typedNode.name === 'ComponentSource') {
+        const name = getNodeAttributeByName(typedNode, 'name')?.value as string;
+        const fileName = getNodeAttributeByName(typedNode, 'fileName')
+          ?.value as string | undefined;
 
         if (!name && !srcPath) {
           return null;
@@ -57,9 +63,9 @@ export function remarkComponent() {
           source = source.replaceAll(`@/registry/`, '@/components/');
           source = source.replaceAll('export default', 'export');
 
-          const title = getNodeAttributeByName(node, 'title');
+          const title = getNodeAttributeByName(typedNode, 'title');
           const showLineNumbers = getNodeAttributeByName(
-            node,
+            typedNode,
             'showLineNumbers'
           );
 
@@ -71,7 +77,7 @@ export function remarkComponent() {
             ].join(' '),
             lang: path.extname(filePath).slice(1),
             value: source,
-          };
+          } as any;
 
           if (parent && typeof index === 'number') {
             parent.children.splice(index, 1, codeBlock);
@@ -81,8 +87,8 @@ export function remarkComponent() {
         }
       }
 
-      if (node.name === 'ComponentPreview') {
-        const name = getNodeAttributeByName(node, 'name')?.value as string;
+      if (typedNode.name === 'ComponentPreview') {
+        const name = getNodeAttributeByName(typedNode, 'name')?.value as string;
 
         if (!name) {
           return null;
@@ -107,7 +113,7 @@ export function remarkComponent() {
             type: 'code',
             lang: 'tsx',
             value: source,
-          };
+          } as any;
 
           if (parent && typeof index === 'number') {
             parent.children.splice(index, 1, codeBlock);

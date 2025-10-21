@@ -1,6 +1,4 @@
-import type { Node } from 'unist-builder';
-
-export interface UnistNode extends Node {
+export interface UnistNode {
   type: string;
   name?: string;
   tagName?: string;
@@ -17,7 +15,8 @@ export interface UnistNode extends Node {
   children?: UnistNode[];
 }
 
-export interface UnistTree extends Node {
+export interface UnistTree {
+  type: string;
   children: UnistNode[];
 }
 

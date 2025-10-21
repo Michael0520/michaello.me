@@ -1,85 +1,102 @@
+import type { Root } from 'hast';
 import { visit } from 'unist-util-visit';
-
-import type { UnistNode, UnistTree } from '@/types/unist';
 
 export function rehypeNpmCommand() {
   // Thanks @shadcn/ui
-  return (tree: UnistTree) => {
-    visit(tree, (node: UnistNode) => {
-      if (node.type !== 'element' || node?.tagName !== 'pre') {
+  return (tree: Root) => {
+    visit(tree, (node) => {
+      if (
+        node.type !== 'element' ||
+        !('tagName' in node) ||
+        node.tagName !== 'pre'
+      ) {
         return;
       }
 
+      // Type guard for properties
+      if (!('properties' in node) || typeof node.properties !== 'object') {
+        return;
+      }
+
+      const properties = node.properties as Record<string, unknown>;
+
       // npm install
-      if (node.properties?.['__rawString__']?.startsWith('npm install')) {
-        const npmCommand = node.properties?.['__rawString__'];
-        node.properties['__pnpm__'] = npmCommand.replaceAll(
+      if (
+        typeof properties['__rawString__'] === 'string' &&
+        properties['__rawString__'].startsWith('npm install')
+      ) {
+        const npmCommand = properties['__rawString__'];
+        properties['__pnpm__'] = npmCommand.replaceAll(
           'npm install',
           'pnpm add'
         );
-        node.properties['__yarn__'] = npmCommand.replaceAll(
+        properties['__yarn__'] = npmCommand.replaceAll(
           'npm install',
           'yarn add'
         );
-        node.properties['__npm__'] = npmCommand;
-        node.properties['__bun__'] = npmCommand.replaceAll(
-          'npm install',
-          'bun add'
-        );
+        properties['__npm__'] = npmCommand;
+        properties['__bun__'] = npmCommand.replaceAll('npm install', 'bun add');
       }
 
       // npx create-
-      if (node.properties?.['__rawString__']?.startsWith('npx create-')) {
-        const npmCommand = node.properties?.['__rawString__'];
-        node.properties['__pnpm__'] = npmCommand.replace(
+      if (
+        typeof properties['__rawString__'] === 'string' &&
+        properties['__rawString__'].startsWith('npx create-')
+      ) {
+        const npmCommand = properties['__rawString__'];
+        properties['__pnpm__'] = npmCommand.replace(
           'npx create-',
           'pnpm create '
         );
-        node.properties['__yarn__'] = npmCommand.replace(
+        properties['__yarn__'] = npmCommand.replace(
           'npx create-',
           'yarn create '
         );
-        node.properties['__npm__'] = npmCommand;
-        node.properties['__bun__'] = npmCommand.replace('npx', 'bunx --bun');
+        properties['__npm__'] = npmCommand;
+        properties['__bun__'] = npmCommand.replace('npx', 'bunx --bun');
       }
 
       // npm create
-      if (node.properties?.['__rawString__']?.startsWith('npm create')) {
-        const npmCommand = node.properties?.['__rawString__'];
-        node.properties['__pnpm__'] = npmCommand.replace(
+      if (
+        typeof properties['__rawString__'] === 'string' &&
+        properties['__rawString__'].startsWith('npm create')
+      ) {
+        const npmCommand = properties['__rawString__'];
+        properties['__pnpm__'] = npmCommand.replace(
           'npm create',
           'pnpm create'
         );
-        node.properties['__yarn__'] = npmCommand.replace(
+        properties['__yarn__'] = npmCommand.replace(
           'npm create',
           'yarn create'
         );
-        node.properties['__npm__'] = npmCommand;
-        node.properties['__bun__'] = npmCommand.replace(
-          'npm create',
-          'bun create'
-        );
+        properties['__npm__'] = npmCommand;
+        properties['__bun__'] = npmCommand.replace('npm create', 'bun create');
       }
 
       // npx
       if (
-        node.properties?.['__rawString__']?.startsWith('npx') &&
-        !node.properties?.['__rawString__']?.startsWith('npx create-')
+        typeof properties['__rawString__'] === 'string' &&
+        properties['__rawString__'].startsWith('npx') &&
+        !properties['__rawString__'].startsWith('npx create-')
       ) {
-        const npmCommand = node.properties?.['__rawString__'];
-        node.properties['__pnpm__'] = npmCommand.replace('npx', 'pnpm dlx');
-        node.properties['__yarn__'] = npmCommand;
-        node.properties['__npm__'] = npmCommand;
-        node.properties['__bun__'] = npmCommand.replace('npx', 'bunx --bun');
+        const npmCommand = properties['__rawString__'];
+        properties['__pnpm__'] = npmCommand.replace('npx', 'pnpm dlx');
+        properties['__yarn__'] = npmCommand;
+        properties['__npm__'] = npmCommand;
+        properties['__bun__'] = npmCommand.replace('npx', 'bunx --bun');
       }
 
       // npm run
-      if (node.properties?.['__rawString__']?.startsWith('npm run')) {
-        const npmCommand = node.properties?.['__rawString__'];
-        node.properties['__pnpm__'] = npmCommand.replace('npm run', 'pnpm');
-        node.properties['__yarn__'] = npmCommand.replace('npm run', 'yarn');
-        node.properties['__npm__'] = npmCommand;
-        node.properties['__bun__'] = npmCommand.replace('npm run', 'bun');
+      if (
+        typeof properties['__rawString__'] === 'string' &&
+        properties['__rawString__'].startsWith('npm run')
+      ) {
+        const npmCommand = properties['__rawString__'];
+        properties['__pnpm__'] = npmCommand.replace('npm run', 'pnpm');
+        properties['__yarn__'] = npmCommand.replace('npm run', 'yarn');
+        properties['__npm__'] = npmCommand;
+        properties['__bun__'] = npmCommand.replace('npm run', 'bun');
       }
     });
   };
