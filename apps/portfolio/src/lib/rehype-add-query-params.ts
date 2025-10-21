@@ -1,10 +1,12 @@
 import { visit } from 'unist-util-visit';
 
-import type { UnistNode, UnistTree } from '@/types/unist';
+import type { UnistNode } from '@/types/unist';
 import { addQueryParams } from '@/utils/url';
 
-export function rehypeAddQueryParams(params: Record<string, string>) {
-  return (tree: UnistTree) => {
+export function rehypeAddQueryParams(
+  params: Record<string, string>
+): (tree: unknown) => void {
+  return (tree: unknown) => {
     visit(tree, (node: UnistNode) => {
       if (
         node.type !== 'element' ||

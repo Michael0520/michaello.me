@@ -4,10 +4,10 @@ import path from 'node:path';
 import { visit } from 'unist-util-visit';
 
 import { Index } from '@/__registry__/index';
-import type { UnistNode, UnistTree } from '@/types/unist';
+import type { UnistNode } from '@/types/unist';
 
-export function remarkComponent() {
-  return (tree: UnistTree) => {
+export function remarkComponent(): (tree: unknown) => void {
+  return (tree: unknown) => {
     visit(tree, (node: UnistNode, index, parent) => {
       // src prop overrides both name and fileName.
       const { value: srcPath } =

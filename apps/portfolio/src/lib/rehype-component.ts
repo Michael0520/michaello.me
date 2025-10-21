@@ -5,11 +5,11 @@ import { u } from 'unist-builder';
 import { visit } from 'unist-util-visit';
 
 import { Index } from '@/__registry__/index';
-import type { UnistNode, UnistTree } from '@/types/unist';
+import type { UnistNode } from '@/types/unist';
 
-export function rehypeComponent() {
+export function rehypeComponent(): (tree: unknown) => Promise<void> {
   // Thanks @shadcn/ui
-  return async (tree: UnistTree) => {
+  return async (tree: unknown) => {
     visit(tree, (node: UnistNode) => {
       // src prop overrides both name and fileName.
       const { value: srcPath } =
