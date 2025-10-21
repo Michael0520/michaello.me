@@ -1,11 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 export function useIsClient() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  return isClient;
+  return useSyncExternalStore(
+    () => () => {}, // subscribe (no-op since this never changes)
+    () => true, // getSnapshot (client-side)
+    () => false // getServerSnapshot (server-side)
+  );
 }

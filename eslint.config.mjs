@@ -38,9 +38,7 @@ export default [
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
       'no-console': ['warn', { allow: ['warn', 'error'] }],
-      // Disable strict rules for portfolio app
-      'react-hooks/set-state-in-effect': 'warn',
-      'jsx-a11y/heading-has-content': 'warn',
+      // Allow <a> tags for external links and anchors (not internal Next.js pages)
       '@next/next/no-html-link-for-pages': 'off',
     },
   },
