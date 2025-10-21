@@ -21,8 +21,9 @@ pnpm remove <package> # Remove package
 pnpm dev
 
 # Run specific app
-pnpm nx dev blog
-pnpm nx dev lab-home
+pnpm nx dev portfolio      # Main portfolio app (port 3000)
+pnpm nx dev blog           # Blog app (port 3001)
+pnpm nx dev lab-home       # Lab homepage (port 3002)
 cd apps/slidevs && pnpm dev  # Slidev (not managed by Nx)
 ```
 
@@ -33,8 +34,9 @@ cd apps/slidevs && pnpm dev  # Slidev (not managed by Nx)
 pnpm build
 
 # Build specific app (production)
-pnpm nx build blog --prod
-pnpm nx build lab-home --prod
+pnpm nx build portfolio --prod   # Main portfolio app
+pnpm nx build blog --prod        # Blog app
+pnpm nx build lab-home --prod    # Lab homepage
 cd apps/slidevs && pnpm build  # Slidev (not managed by Nx)
 ```
 
@@ -62,20 +64,39 @@ pnpm nx reset                      # Clear Nx cache
 
 ```
 apps/
-├── blog/                   # Main blog website (Fumadocs + Next.js 15)
+├── portfolio/              # Main landing page (Next.js 15) - Primary domain
+│   ├── src/app/
+│   │   ├── (app)/
+│   │   │   ├── (root)/page.tsx    # Profile landing page
+│   │   │   └── (docs)/            # Blog & components routes
+│   │   │       ├── blog/          # Portfolio blog posts
+│   │   │       └── components/    # Component showcase
+│   │   ├── layout.tsx             # Root layout
+│   │   ├── manifest.ts            # PWA manifest
+│   │   └── sitemap.ts             # Sitemap generation
+│   ├── src/features/
+│   │   ├── profile/               # Profile components
+│   │   └── blog/                  # Blog components
+│   ├── content/                   # MDX blog posts
+│   ├── next.config.mjs            # Multi-zone rewrites config
+│   └── vercel.json                # Vercel deployment config
+│
+├── blog/                   # Blog website (Fumadocs + Next.js 15)
 │   ├── src/app/
 │   │   ├── page.tsx       # Blog homepage (lists all posts)
 │   │   ├── posts/         # Blog posts routes
 │   │   ├── projects/      # Projects showcase page
 │   │   ├── talks/         # Talks/Presentations list page
 │   │   └── about/         # About page (optional)
-│   └── content/posts/     # MDX blog posts organized by category
+│   ├── content/posts/     # MDX blog posts organized by category
+│   └── vercel.json        # Vercel deployment config
 │
 ├── lab/                    # Lab projects folder
 │   └── home/              # Lab homepage (Next.js 15)
 │       ├── src/app/
 │       │   └── page.tsx   # Lab projects list
-│       └── next.config.js # basePath: '/lab'
+│       ├── next.config.js # basePath: '/lab'
+│       └── vercel.json    # Vercel deployment config
 │
 └── slidevs/               # Presentations/slides (Slidev)
     ├── 2025-06-29/        # Individual talk (date-based)
@@ -116,26 +137,30 @@ This monorepo uses **Next.js Multi-Zones** to serve multiple apps under a single
 ### URL Structure
 
 ```
-michaello.me/              → blog app (Blog homepage with posts list)
-michaello.me/posts         → blog app (Blog posts)
-michaello.me/posts/xxx     → blog app (Blog articles)
-michaello.me/projects      → blog app (Projects showcase page)
-michaello.me/talks         → blog app (Talks list page)
+michaello.me/              → portfolio app (Landing page with profile)
+michaello.me/blog          → portfolio app (Portfolio blog posts)
+michaello.me/blog/xxx      → portfolio app (Portfolio blog articles)
+michaello.me/components    → portfolio app (Component showcase)
+michaello.me/components/xxx → portfolio app (Component details)
+
+michaello.me/posts         → blog app (via rewrite to separate deployment)
+michaello.me/posts/xxx     → blog app (via rewrite to separate deployment)
 
 michaello.me/lab           → lab/home app (via rewrite)
 michaello.me/lab/calculator → lab/calculator app (future)
 michaello.me/lab/todo      → lab/todo app (future)
 
-michaello.me/slides        → slidevs app (via rewrite)
-michaello.me/slides/10-01  → slidevs app (individual slides)
+michaello.me/talks         → slidevs app (via rewrite)
+michaello.me/talks/xxx     → slidevs app (individual slides)
 ```
 
 ### How Multi-Zones Work
 
-- **blog** app is the main zone (no basePath)
-- **lab/home** app uses `basePath: '/lab'`
-- **slidevs** app uses `basePath: '/slides'`
-- Blog's `next.config.js` contains `rewrites()` to route `/lab/*` and `/slides/*` to their respective Vercel deployments
+- **portfolio** app is the main zone (no basePath) deployed to main domain
+- **blog** app serves `/posts` routes (deployed separately, accessed via rewrite)
+- **lab/home** app uses `basePath: '/lab'` (deployed separately, accessed via rewrite)
+- **slidevs** app uses `basePath: '/talks'` (deployed separately, accessed via rewrite)
+- Portfolio's `next.config.mjs` contains `rewrites()` to route `/posts/*`, `/lab/*`, and `/talks/*` to their respective Vercel deployments
 
 ## Blog Content (Fumadocs)
 
@@ -239,9 +264,25 @@ git commit -m "feat(lab-home): create lab projects showcase"
 
 Each app is deployed as a separate Vercel project:
 
-### Blog (Main Zone)
+### Portfolio (Main Zone)
 
 - **Domain**: `michaello.me`, `www.michaello.me`
+- **Vercel Project**: `michaello-portfolio` (or your Vercel project name)
+- **Root Directory**: Leave empty (monorepo root)
+- **Build Command**: `pnpm nx build portfolio --prod`
+- **Output Directory**: `apps/portfolio/.next`
+- **Framework**: Next.js
+- **Environment Variables**: All optional (can use defaults from `@milo-me/site-config`)
+  - `NEXT_PUBLIC_BASE_URL` - Portfolio URL (default: auto-detected)
+  - `GITHUB_USERNAME` - GitHub username for contributions graph
+  - `NEXT_PUBLIC_GA_ID` - Google Analytics ID (optional)
+  - `NEXT_PUBLIC_POSTHOG_KEY` - PostHog analytics key (optional)
+
+**Important**: Portfolio app uses rewrites to route `/posts`, `/lab`, and `/talks` to other Vercel deployments. Update the URLs in `apps/portfolio/next.config.mjs` after deploying other apps.
+
+### Blog
+
+- **Domain**: None (accessed via rewrite from portfolio: `/posts`)
 - **Vercel Project**: `michaello-blog`
 - **Root Directory**: Leave empty (monorepo root)
 - **Build Command**: `pnpm nx build blog --prod`
@@ -250,7 +291,7 @@ Each app is deployed as a separate Vercel project:
 
 ### Lab Home
 
-- **Domain**: None (accessed via rewrite from main domain)
+- **Domain**: None (accessed via rewrite from portfolio: `/lab`)
 - **Vercel Project**: `michaello-lab-home`
 - **Root Directory**: Leave empty
 - **Build Command**: `pnpm nx build lab-home --prod`
@@ -259,14 +300,12 @@ Each app is deployed as a separate Vercel project:
 
 ### Slidevs
 
-- **Domain**: None (accessed via rewrite from main domain)
+- **Domain**: None (accessed via rewrite from portfolio: `/talks`)
 - **Vercel Project**: `michaello-slides`
 - **Root Directory**: Leave empty
 - **Build Command**: `pnpm nx build slidevs --prod`
 - **Output Directory**: `apps/slidevs/.next`
 - **Framework**: Next.js
-
-**Important**: Update the Vercel URLs in `apps/blog/next.config.js` rewrites after deploying lab-home and slidevs.
 
 ## Adding Lab Projects
 
