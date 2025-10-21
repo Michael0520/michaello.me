@@ -1,5 +1,13 @@
-import { LineShadowText } from '@/components/ui/line-shadow-text';
+import { MorphingText } from '@/components/ui/morphing-text';
 import { cn } from '@/lib/utils';
+
+const MORPHING_TEXTS = [
+  'Developer',
+  'Engineer',
+  'Creator',
+  'Builder',
+  'Designer',
+];
 
 export function ProfileCover() {
   return (
@@ -11,9 +19,10 @@ export function ProfileCover() {
         'bg-black/0.75 bg-[radial-gradient(var(--pattern-foreground)_1px,transparent_0)] bg-size-[10px_10px] bg-center [--pattern-foreground:var(--color-zinc-950)]/5 dark:bg-white/0.75 dark:[--pattern-foreground:var(--color-white)]/5'
       )}
     >
-      <LineShadowText className="text-4xl italic sm:text-6xl">
-        Developer
-      </LineShadowText>
+      <MorphingText
+        texts={MORPHING_TEXTS}
+        className="text-4xl font-semibold italic sm:text-6xl"
+      />
     </div>
   );
 }
