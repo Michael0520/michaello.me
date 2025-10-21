@@ -7,7 +7,7 @@ import { Index } from '@/__registry__/index';
 import type { UnistNode, UnistTree } from '@/types/unist';
 
 export function remarkComponent() {
-  return async (tree: UnistTree) => {
+  return (tree: UnistTree) => {
     visit(tree, (node: UnistNode, index, parent) => {
       // src prop overrides both name and fileName.
       const { value: srcPath } =
