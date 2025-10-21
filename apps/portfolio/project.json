@@ -1,0 +1,17 @@
+{
+  "name": "portfolio",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/portfolio",
+  "projectType": "application",
+  "tags": [],
+  "// targets": "to see all targets run: nx show project portfolio --web",
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/portfolio/**/*.{ts,tsx,js,jsx}"]
+      }
+    }
+  }
+}
