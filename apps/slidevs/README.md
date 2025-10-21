@@ -38,4 +38,4 @@ pnpm build
 
 ## Deployment
 
-Each talk is built as a static site and deployed to `/slides/YYYY-MM-DD/` path.
+Each talk is built as a static site and deployed to `/talks/YYYY-MM-DD/` path.

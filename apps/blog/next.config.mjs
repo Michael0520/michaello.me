@@ -26,12 +26,12 @@ const nextConfig = {
       },
       // Slides zone rewrites
       {
-        source: '/slides',
-        destination: 'https://michaello-slides.vercel.app/slides',
+        source: '/talks',
+        destination: 'https://michaello-slides.vercel.app/talks',
       },
       {
-        source: '/slides/:path*',
-        destination: 'https://michaello-slides.vercel.app/slides/:path*',
+        source: '/talks/:path*',
+        destination: 'https://michaello-slides.vercel.app/talks/:path*',
       },
     ];
   },

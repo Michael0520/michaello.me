@@ -29,12 +29,12 @@ const nextConfig = {
     return [
       // Blog zone rewrites
       {
-        source: '/blog',
-        destination: 'https://michaello-blog.vercel.app/blog',
+        source: '/posts',
+        destination: 'https://michaello-blog.vercel.app/posts',
       },
       {
-        source: '/blog/:path*',
-        destination: 'https://michaello-blog.vercel.app/blog/:path*',
+        source: '/posts/:path*',
+        destination: 'https://michaello-blog.vercel.app/posts/:path*',
       },
       // Lab zone rewrites
       {
@@ -47,12 +47,12 @@ const nextConfig = {
       },
       // Slides zone rewrites
       {
-        source: '/slides',
-        destination: 'https://michaello-slides.vercel.app/slides',
+        source: '/talks',
+        destination: 'https://michaello-slides.vercel.app/talks',
       },
       {
-        source: '/slides/:path*',
-        destination: 'https://michaello-slides.vercel.app/slides/:path*',
+        source: '/talks/:path*',
+        destination: 'https://michaello-slides.vercel.app/talks/:path*',
       },
       // Portfolio internal MDX rewrites
       {
