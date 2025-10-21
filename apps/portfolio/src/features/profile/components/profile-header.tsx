@@ -19,37 +19,6 @@ export function ProfileHeader() {
             fetchPriority="high"
           />
         </div>
-
-        <SimpleTooltip content="I'm from Taiwan">
-          {/* Flag of Taiwan */}
-          <svg
-            className="absolute top-0 -left-px h-8 sm:h-9"
-            viewBox="0 0 30 20"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            {/* Red background */}
-            <rect width="30" height="20" fill="#FE0000" />
-            {/* Blue canton */}
-            <rect width="15" height="10" fill="#000095" />
-            {/* White sun */}
-            <circle cx="7.5" cy="5" r="2.5" fill="#FFF" />
-            {/* 12 sun rays */}
-            <g fill="#FFF">
-              <polygon points="7.5,0.5 7.2,2.2 7.8,2.2" />
-              <polygon points="9.67,1.17 8.5,2.5 9,3" />
-              <polygon points="10.83,3.33 9.2,3.8 9.5,4.5" />
-              <polygon points="11,5.5 9.5,5.2 9.5,5.8" />
-              <polygon points="10.83,6.67 9.5,6.5 9.2,7.2" />
-              <polygon points="9.67,8.83 8.5,7.5 9,7" />
-              <polygon points="7.5,9.5 7.2,7.8 7.8,7.8" />
-              <polygon points="5.33,8.83 6.5,7.5 6,7" />
-              <polygon points="4.17,6.67 5.8,7.2 5.5,6.5" />
-              <polygon points="4,5.5 5.5,5.8 5.5,5.2" />
-              <polygon points="4.17,3.33 5.5,3.5 5.8,2.8" />
-              <polygon points="5.33,1.17 6.5,2.5 6,3" />
-            </g>
-          </svg>
-        </SimpleTooltip>
       </div>
 
       <div className="flex flex-1 flex-col">
