@@ -117,6 +117,7 @@ export default function RootLayout({
         <script
           type="text/javascript"
           dangerouslySetInnerHTML={{ __html: darkModeScript }}
+          suppressHydrationWarning
         />
         {/*
           Thanks @tailwindcss. We inject the script via the `<Script/>` tag again,
@@ -128,6 +129,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{
             __html: JSON.stringify(getWebSiteJsonLd()).replace(/</g, '\\u003c'),
           }}
+          suppressHydrationWarning
         />
       </head>
 

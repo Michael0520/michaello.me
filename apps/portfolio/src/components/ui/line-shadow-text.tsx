@@ -53,6 +53,7 @@ export function LineShadowText({
           repeat: Infinity,
           ease: 'easeInOut',
         }}
+        suppressHydrationWarning
       >
         {children}
       </motion.span>

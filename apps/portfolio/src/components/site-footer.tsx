@@ -19,7 +19,7 @@ export function SiteFooter() {
             className="link"
             href={SITE_INFO.url}
             target="_blank"
-            rel="noopener"
+            rel="noopener noreferrer"
           >
             Michael Lo
           </a>

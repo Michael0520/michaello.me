@@ -2,21 +2,27 @@ import type { SocialLink } from '../types/social-links';
 
 export const SOCIAL_LINKS: SocialLink[] = [
   {
-    icon: 'https://cdn.simpleicons.org/github/white',
+    icon: 'github',
     title: 'GitHub',
     description: '@michael0520',
     href: 'https://github.com/michael0520',
   },
   {
-    icon: 'https://cdn.simpleicons.org/instagram',
+    icon: 'instagram',
     title: 'Instagram',
     description: '@michaello.dev',
     href: 'https://www.instagram.com/michaello.dev/',
   },
   {
-    icon: 'https://cdn.simpleicons.org/gmail',
-    title: 'Email',
-    description: 'michael860502@gmail.com',
-    href: 'mailto:michael860502@gmail.com',
+    icon: 'threads',
+    title: 'Threads',
+    description: '@michaello.dev',
+    href: 'https://www.threads.net/@michaello.dev?igshid=NTc4MTIwNjQ2YQ==',
+  },
+  {
+    icon: 'bento',
+    title: 'Bento',
+    description: 'Code4Taiwan Community',
+    href: 'https://code4taiwan.pse.is/88cqre',
   },
 ];

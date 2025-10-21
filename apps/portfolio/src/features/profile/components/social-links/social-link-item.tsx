@@ -1,10 +1,21 @@
+'use client';
+
+import { Icon } from '@iconify/react';
 import { ArrowUpRightIcon } from 'lucide-react';
-import Image from 'next/image';
 
 import type { SocialLink } from '@/features/profile/types/social-links';
 import { cn } from '@/lib/utils';
 
+const iconMap = {
+  github: 'carbon:logo-github',
+  instagram: 'carbon:logo-instagram',
+  threads: 'carbon:chat',
+  bento: 'carbon:grid',
+} as const;
+
 export function SocialLinkItem({ icon, title, description, href }: SocialLink) {
+  const iconName = iconMap[icon];
+
   return (
     <a
       className={cn(
@@ -14,18 +25,10 @@ export function SocialLinkItem({ icon, title, description, href }: SocialLink) {
       )}
       href={href}
       target="_blank"
-      rel="noopener"
+      rel="noopener noreferrer"
     >
-      <div className="relative size-12 shrink-0">
-        <Image
-          className="rounded-xl"
-          src={icon}
-          alt={title}
-          width={48}
-          height={48}
-          quality={100}
-          unoptimized
-        />
+      <div className="relative size-14 shrink-0 flex items-center justify-center rounded-xl bg-muted/50">
+        <Icon icon={iconName} className="size-8 text-foreground" />
         <div className="pointer-events-none absolute inset-0 rounded-xl ring-1 ring-black/10 ring-inset dark:ring-white/10" />
       </div>
 
