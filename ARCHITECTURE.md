@@ -496,6 +496,49 @@ Framework: Next.js
 
 ---
 
+### Nx Build Optimization
+
+To avoid unnecessary Vercel builds, all apps use `nx-ignore` to check if a rebuild is needed.
+
+**How it works:**
+
+When code is pushed to Git, Vercel runs the `ignoreCommand` for each project. `nx-ignore` uses Nx's affected detection to determine if the app is impacted:
+
+- If code changes affect the app → returns exit code 0 (proceed with build)
+- If code changes don't affect the app → returns exit code 1 (skip build)
+
+**Configuration Example (vercel.json):**
+
+```json
+{
+  "buildCommand": "pnpm nx build portfolio --prod",
+  "ignoreCommand": "npx nx-ignore portfolio"
+}
+```
+
+**App Configurations:**
+
+| App       | ignoreCommand             |
+| --------- | ------------------------- |
+| Portfolio | `npx nx-ignore portfolio` |
+| Blog      | `npx nx-ignore blog`      |
+| Lab Home  | `npx nx-ignore lab-home`  |
+| Slidevs   | `npx nx-ignore slidevs`   |
+
+**Benefits:**
+
+- Significantly reduces CI/CD build time
+- Only builds affected applications
+- Saves Vercel build minute quota
+- Follows Nx monorepo best practices
+
+**References:**
+
+- [Nx Ignore on Vercel](https://vercel.com/docs/monorepos/nx)
+- [nx-ignore npm package](https://www.npmjs.com/package/nx-ignore)
+
+---
+
 ## 構建依賴關係
 
 ### Nx 依賴圖
