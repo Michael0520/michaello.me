@@ -23,7 +23,8 @@
     "types": ["node"],
     "lib": ["dom", "dom.iterable", "esnext"],
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "@milo-me/blog-metadata": ["../../dist/libs/blog-metadata/src/index.d.ts"]
     }
   },
   "include": [

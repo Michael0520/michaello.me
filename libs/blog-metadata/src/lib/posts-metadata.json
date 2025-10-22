@@ -1,0 +1,83 @@
+[
+  {
+    "slug": "functional-programming-concepts",
+    "title": "Functional Programming Concepts - Curry、Compose、Pipe",
+    "description": "探討函數式編程中的 Curry、Compose、Pipe 的實作與應用",
+    "date": "2025-02-19T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false,
+    "icon": "lucide:book-open-text"
+  },
+  {
+    "slug": "radio-pattern",
+    "title": "R.A.D.I.O Pattern",
+    "description": "探討 Netflix 的前端開發框架與設計模式",
+    "date": "2025-02-15T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false,
+    "icon": "lucide:book-open-text"
+  },
+  {
+    "slug": "css-grid-template",
+    "title": "Grid Template：最直覺的 CMS Layout 解決方案",
+    "description": "使用 Grid Template Areas 打造直覺且易維護的 CMS 版面配置",
+    "date": "2025-02-14T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false,
+    "icon": "fa6-solid:toolbox"
+  },
+  {
+    "slug": "temporal",
+    "title": "JavaScript 原生時間日期處理庫 - Temporal",
+    "description": "介紹 Temporal 的時間日期處理",
+    "date": "2025-02-06T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false,
+    "icon": "fa6-solid:toolbox"
+  },
+  {
+    "slug": "ni",
+    "title": "用 ni 管理所有 Node 套件",
+    "description": "學習如何安裝與使用 ni，統一處理多種包管理器需求，專注於開發本身",
+    "date": "2025-02-03T21:18:08.000Z",
+    "category": "frontend",
+    "featured": false,
+    "icon": "fa6-solid:toolbox"
+  },
+  {
+    "slug": "github-copilot",
+    "title": "GitHub Copilot 是什麼?",
+    "description": "GitHub Copilot 是甚麼?",
+    "date": "2025-02-01T23:00:00.000Z",
+    "category": "tech-talk",
+    "featured": false,
+    "icon": "lucide:bot"
+  },
+  {
+    "slug": "encode",
+    "title": "Encode、Decode、Hash 是甚麼東西?",
+    "description": "編碼、解碼、加密",
+    "date": "2023-10-11T23:50:24.000Z",
+    "category": "backend",
+    "featured": false,
+    "icon": "lucide:lock-keyhole"
+  },
+  {
+    "slug": "jwt",
+    "title": "JWT機制",
+    "description": "JSON Web Tokens、Cryptography",
+    "date": "2023-03-25T11:14:47.000Z",
+    "category": "backend",
+    "featured": false,
+    "icon": "lucide:table-of-contents"
+  },
+  {
+    "slug": "web-performance",
+    "title": "網頁的效能指標及優化",
+    "description": "Performance、Metrics",
+    "date": "2022-12-15T21:18:08.000Z",
+    "category": "frontend",
+    "featured": false,
+    "icon": "lucide:power-off"
+  }
+]

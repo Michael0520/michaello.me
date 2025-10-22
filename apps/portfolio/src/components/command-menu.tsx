@@ -186,14 +186,9 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
     [playClick, setTheme]
   );
 
-  const { blogLinks, componentLinks } = useMemo(
+  const { blogLinks } = useMemo(
     () => ({
-      blogLinks: posts
-        .filter((post) => post.metadata?.category !== 'components')
-        .map(postToCommandLinkItem),
-      componentLinks: posts
-        .filter((post) => post.metadata?.category === 'components')
-        .map(postToCommandLinkItem),
+      blogLinks: posts.map(postToCommandLinkItem),
     }),
     [posts]
   );
@@ -257,15 +252,6 @@ export function CommandMenu({ posts }: { posts: Post[] }) {
             heading="Blog"
             links={blogLinks}
             fallbackIcon={TextIcon}
-            onLinkSelect={handleOpenLink}
-          />
-
-          <CommandSeparator />
-
-          <CommandLinkGroup
-            heading="Components"
-            links={componentLinks}
-            fallbackIcon={Icons.react}
             onLinkSelect={handleOpenLink}
           />
 
@@ -481,11 +467,9 @@ function CommandMenuKbd({ className, ...props }: React.ComponentProps<'kbd'>) {
 }
 
 function postToCommandLinkItem(post: Post): CommandLinkItem {
-  const isComponent = post.metadata?.category === 'components';
-
   return {
     title: post.metadata.title,
-    href: isComponent ? `/components/${post.slug}` : `/blog/${post.slug}`,
-    keywords: isComponent ? ['component'] : undefined,
+    href: `/posts/${post.slug}`,
+    keywords: undefined,
   };
 }

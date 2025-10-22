@@ -1,6 +1,11 @@
 //@ts-check
 
 import { composePlugins, withNx } from '@nx/next';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
@@ -10,10 +15,18 @@ const nextConfig = {
     svgr: false,
   },
   reactStrictMode: true,
-  transpilePackages: ['next-mdx-remote'],
+  transpilePackages: ['next-mdx-remote', '@milo-me/blog-metadata'],
   devIndicators: false,
   experimental: {
     externalDir: true,
+  },
+  webpack: (config) => {
+    // Add alias for blog-metadata library
+    config.resolve.alias['@milo-me/blog-metadata'] = path.resolve(
+      __dirname,
+      '../../dist/libs/blog-metadata/src/index.js'
+    );
+    return config;
   },
   images: {
     remotePatterns: [
@@ -53,15 +66,6 @@ const nextConfig = {
       {
         source: '/talks/:path*',
         destination: 'https://michaello-slides.vercel.app/talks/:path*',
-      },
-      // Portfolio internal MDX rewrites
-      {
-        source: '/blog/:slug.mdx',
-        destination: '/blog.mdx/:slug',
-      },
-      {
-        source: '/components/:slug.mdx',
-        destination: '/blog.mdx/:slug',
       },
     ];
   },

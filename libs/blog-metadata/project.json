@@ -1,0 +1,40 @@
+{
+  "name": "blog-metadata",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/blog-metadata/src",
+  "projectType": "library",
+  "tags": [],
+  "targets": {
+    "extract-metadata": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "pnpm dlx tsx libs/blog-metadata/scripts/extract-metadata.ts"
+      },
+      "inputs": ["{workspaceRoot}/apps/blog/content/posts/**/*.mdx"],
+      "outputs": ["{projectRoot}/src/lib/posts-metadata.json"]
+    },
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/blog-metadata",
+        "main": "libs/blog-metadata/src/index.ts",
+        "tsConfig": "libs/blog-metadata/tsconfig.lib.json",
+        "assets": [
+          "libs/blog-metadata/*.md",
+          {
+            "input": "libs/blog-metadata",
+            "glob": "package.json",
+            "output": "."
+          },
+          {
+            "input": "libs/blog-metadata/src/lib",
+            "glob": "posts-metadata.json",
+            "output": "./src/lib"
+          }
+        ]
+      },
+      "dependsOn": ["extract-metadata"]
+    }
+  }
+}

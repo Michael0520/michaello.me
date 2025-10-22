@@ -15,7 +15,7 @@ export function PostItem({
 }) {
   return (
     <Link
-      href={`/blog/${post.slug}`}
+      href={`/posts/${post.slug}`}
       className={cn(
         'group/post flex flex-col gap-2 p-2',
         'max-sm:screen-line-before max-sm:screen-line-after',
