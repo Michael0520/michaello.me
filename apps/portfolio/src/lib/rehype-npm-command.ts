@@ -1,9 +1,10 @@
-import type { Root } from 'hast';
 import { visit } from 'unist-util-visit';
+
+import type { UnistTree } from '@/types/unist';
 
 export function rehypeNpmCommand() {
   // Thanks @shadcn/ui
-  return (tree: Root) => {
+  return (tree: UnistTree) => {
     visit(tree, (node) => {
       if (
         node.type !== 'element' ||

@@ -1,16 +1,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type { Root } from 'hast';
 import { u } from 'unist-builder';
 import { visit } from 'unist-util-visit';
 
 import { Index } from '@/__registry__/index';
-import type { UnistNode } from '@/types/unist';
+import type { UnistNode, UnistTree } from '@/types/unist';
 
 export function rehypeComponent() {
   // Thanks @shadcn/ui
-  return async (tree: Root) => {
+  return async (tree: UnistTree) => {
     visit(tree, (node) => {
       // Type guard to ensure node has required properties
       if (!('name' in node)) {

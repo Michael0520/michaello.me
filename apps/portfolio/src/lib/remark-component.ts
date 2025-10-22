@@ -1,14 +1,13 @@
 import fs from 'node:fs';
 import path from 'node:path';
 
-import type { Root } from 'mdast';
 import { visit } from 'unist-util-visit';
 
 import { Index } from '@/__registry__/index';
-import type { UnistNode } from '@/types/unist';
+import type { UnistNode, UnistTree } from '@/types/unist';
 
 export function remarkComponent() {
-  return (tree: Root) => {
+  return (tree: UnistTree) => {
     visit(tree, (node, index, parent) => {
       // Type guard to ensure node has required properties
       if (!('name' in node)) {

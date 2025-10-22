@@ -1,24 +1,20 @@
-import type { Root } from 'hast';
 import { visit } from 'unist-util-visit';
 
+import type { UnistNode, UnistTree } from '@/types/unist';
 import { addQueryParams } from '@/utils/url';
 
 export function rehypeAddQueryParams(params: Record<string, string>) {
-  return (tree: Root) => {
-    visit(tree, (node) => {
+  return (tree: UnistTree) => {
+    visit(tree, (node: UnistNode) => {
       if (
         node.type !== 'element' ||
-        !('tagName' in node) ||
-        node.tagName !== 'a' ||
-        !('properties' in node) ||
-        !node.properties ||
-        typeof node.properties !== 'object' ||
-        !('href' in node.properties)
+        node?.tagName !== 'a' ||
+        !node?.properties?.href
       ) {
         return;
       }
 
-      const href = node.properties.href as string | undefined;
+      const href = node.properties?.href as string | undefined;
 
       if (
         !href ||
