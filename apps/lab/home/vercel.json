@@ -4,5 +4,6 @@
   "buildCommand": "pnpm nx build lab-home --prod",
   "installCommand": "pnpm install",
   "outputDirectory": "apps/lab/home/.next",
-  "framework": "nextjs"
+  "framework": "nextjs",
+  "ignoreCommand": "npx nx-ignore lab-home"
 }
