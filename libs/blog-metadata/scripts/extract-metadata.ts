@@ -65,7 +65,5 @@ const outputPath = path.join(__dirname, '../src/lib/posts-metadata.json');
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, JSON.stringify(metadata, null, 2));
 
-// eslint-disable-next-line no-console
-console.log(`✅ Extracted metadata for ${metadata.length} posts`);
-// eslint-disable-next-line no-console
-console.log(`📁 Output: ${outputPath}`);
+console.info(`✅ Extracted metadata for ${metadata.length} posts`);
+console.info(`📁 Output: ${outputPath}`);

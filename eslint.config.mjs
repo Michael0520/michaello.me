@@ -37,7 +37,7 @@ export default [
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },
       ],
       '@typescript-eslint/no-explicit-any': 'warn',
-      'no-console': ['warn', { allow: ['warn', 'error'] }],
+      'no-console': ['warn', { allow: ['warn', 'error', 'info'] }],
       // Allow <a> tags for external links and anchors (not internal Next.js pages)
       '@next/next/no-html-link-for-pages': 'off',
     },
