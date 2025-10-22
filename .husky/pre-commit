@@ -1,1 +1,14 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+# Auto-extract blog metadata when blog content changes
+if git diff --cached --name-only | grep -q "^apps/blog/content/posts/.*\.mdx$"; then
+  echo "📝 Blog content changed, extracting metadata..."
+  pnpm dlx tsx libs/blog-metadata/scripts/extract-metadata.ts
+
+  # Add metadata.json to staging
+  git add libs/blog-metadata/src/lib/posts-metadata.json
+  echo "✅ Metadata extracted and staged"
+fi
+
 pnpm lint-staged

@@ -151,7 +151,9 @@ pnpm nx show projects       # List all projects
 
 ## Blog Content Workflow
 
-When adding/editing blog posts:
+**Fully automated workflow** - metadata extraction is automatic via Git hooks.
+
+### Writing a New Post
 
 1. **Create/Edit MDX file**: `apps/blog/content/posts/frontend/new-article.mdx`
 
@@ -160,12 +162,41 @@ When adding/editing blog posts:
    title: Article Title
    description: Brief description
    date: 2025-01-15
+   category: frontend
+   featured: true # Optional
+   icon: lucide:star # Optional
    ---
+   Article content here...
    ```
 
-2. **Extract metadata**: `pnpm nx run blog-metadata:extract-metadata`
-3. **Build apps**: `pnpm nx build blog --prod && pnpm nx build portfolio --prod`
-4. **Deploy**: Push to Git → Vercel rebuilds only affected apps
+2. **Commit your changes**:
+
+   ```bash
+   git add apps/blog/content/posts/frontend/new-article.mdx
+   git commit -m "feat(blog): add new blog post about XXX"
+   # → Pre-commit hook automatically:
+   #    ✅ Detects MDX changes
+   #    ✅ Runs extract-metadata
+   #    ✅ Stages posts-metadata.json
+   ```
+
+3. **Push to deploy**:
+
+   ```bash
+   git push
+   # → Vercel automatically:
+   #    ✅ Blog app: Detects content changes → Rebuilds
+   #    ✅ Portfolio app: Detects metadata changes → Rebuilds
+   #    ⏭️ Other apps: Skips build (nx-ignore)
+   ```
+
+### Manual Metadata Extraction (if needed)
+
+```bash
+pnpm nx run blog-metadata:extract-metadata
+```
+
+Only needed if you bypass Git hooks or need to regenerate metadata manually.
 
 ## Shared Libraries
 

@@ -54,6 +54,14 @@
     "icon": "lucide:bot"
   },
   {
+    "slug": "test-automation",
+    "title": "Testing Blog Automation Workflow",
+    "description": "A test post to verify the automated metadata extraction via Git hooks",
+    "date": "2025-01-23T00:00:00.000Z",
+    "category": "tech-talk",
+    "featured": false
+  },
+  {
     "slug": "encode",
     "title": "Encode、Decode、Hash 是甚麼東西?",
     "description": "編碼、解碼、加密",
