@@ -1,62 +1,70 @@
-# Milo Me - Personal Website Monorepo
+# Michaello.me - Personal Website Monorepo
 
 A modern Nx monorepo for [michaello.me](https://michaello.me) using Next.js Multi-Zones architecture.
 
-## 🏗️ Architecture
+## Architecture
 
 ### Multi-Zones Design
 
 This monorepo serves **multiple independent Next.js applications** under a **single domain** using Next.js Multi-Zones pattern.
 
 ```
-michaello.me/              → blog app (Main Zone)
-michaello.me/posts/*       → blog app
-michaello.me/projects      → blog app
-michaello.me/talks         → blog app
+michaello.me/              → Portfolio App (Main Zone)
+michaello.me/blog          → Portfolio App (blog list)
+michaello.me/components    → Portfolio App (component showcase)
 
-michaello.me/lab           → lab-home app (Rewrite Zone)
-michaello.me/lab/*         → lab-home app
+michaello.me/posts/*       → Blog App (via rewrite, full content)
+michaello.me/projects      → Blog App (via rewrite)
+michaello.me/talks         → Blog App (via rewrite)
 
-michaello.me/slides        → slidevs app (Rewrite Zone)
-michaello.me/slides/*      → slidevs app
+michaello.me/lab/*         → Lab Home App (via rewrite)
+michaello.me/talks/*       → Slidevs App (via rewrite)
 ```
 
 **How it works:**
 
-- `blog` app is the **main zone** (no basePath)
-- `lab-home` and `slidevs` apps have their own `basePath`
-- Main zone's `next.config.js` contains `rewrites()` to route `/lab/*` and `/slides/*` to their Vercel deployments
+- `portfolio` app is the **main zone** (deployed to `michaello.me`)
+- Other apps (`blog`, `lab-home`, `slidevs`) are deployed separately
+- Main zone's `next.config.mjs` contains `rewrites()` to route traffic to other apps
 - Each app is **deployed separately** on Vercel
 - User sees **one unified domain**
 
 ### Project Structure
 
 ```
-milo-me-new/
+michaello.me/
 ├── apps/
-│   ├── blog/                      # Main Zone (michaello.me)
+│   ├── portfolio/                 # Main Zone (michaello.me)
 │   │   ├── src/app/
-│   │   │   ├── page.tsx          # Homepage (blog posts list)
-│   │   │   ├── posts/[[...slug]]/  # Blog posts (Fumadocs)
-│   │   │   ├── projects/         # Projects page
-│   │   │   └── talks/            # Talks page
+│   │   │   ├── (root)/           # Profile landing page
+│   │   │   └── (docs)/           # Blog list & components
+│   │   └── next.config.mjs       # ⭐ Multi-Zones rewrites config
+│   │
+│   ├── blog/                     # Blog Zone (michaello.me/posts)
+│   │   ├── src/app/
+│   │   │   ├── page.tsx          # Blog homepage
+│   │   │   └── posts/[[...slug]] # Full MDX articles
 │   │   ├── content/posts/        # MDX blog content
-│   │   │   ├── frontend/
+│   │   │   ├── frontend/         # ~11 posts
 │   │   │   ├── backend/
 │   │   │   ├── leetcode/
 │   │   │   └── tech-talk/
-│   │   └── next.config.js        # ⭐ Multi-Zones rewrites config
+│   │   └── next.config.mjs
 │   │
 │   ├── lab/home/                 # Lab Zone (michaello.me/lab)
 │   │   ├── src/app/page.tsx     # Lab projects list
-│   │   └── next.config.js        # basePath: '/lab'
+│   │   └── next.config.mjs      # basePath: '/lab'
 │   │
-│   └── slidevs/                  # Slides Zone (michaello.me/slides)
+│   └── slidevs/                  # Slides Zone (michaello.me/talks)
 │       ├── 2025-06-29/           # Date-organized presentations
 │       │   └── src/slides.md
-│       └── next.config.js        # basePath: '/slides'
+│       └── next.config.mjs       # basePath: '/talks'
 │
 └── libs/
+    ├── blog-metadata/            # Blog metadata extraction
+    │   └── src/
+    │       ├── index.ts          # Public API
+    │       └── lib/posts-metadata.json
     ├── site-config/              # Shared site metadata
     │   └── src/
     │       ├── index.ts          # Author, social, analytics config
@@ -68,12 +76,13 @@ milo-me-new/
 ### Key Architecture Principles
 
 1. **Independent Deployment**: Each app has its own Vercel project
-2. **Shared Libraries**: `site-config` and `shared-ui` are shared via Nx workspace
+2. **Shared Libraries**: `blog-metadata`, `site-config`, and `shared-ui` shared via Nx
 3. **Type Safety**: TypeScript strict mode across all apps
 4. **Zero-Config Styling**: Tailwind CSS v4 (no config file needed)
 5. **Content-Driven**: Blog uses Fumadocs MDX loader with static generation
+6. **Build Optimization**: `nx-ignore` skips unnecessary builds on Vercel
 
-## 🚀 Tech Stack
+## Tech Stack
 
 | Layer               | Technology                        |
 | ------------------- | --------------------------------- |
@@ -88,44 +97,33 @@ milo-me-new/
 | **Package Manager** | pnpm                              |
 | **Deployment**      | Vercel (Multi-Zones)              |
 
-## 🌐 Deployment Architecture
+## Deployment Architecture
 
 Each app is deployed as a **separate Vercel project**:
 
-| App          | Vercel Project       | Domain         | Build Command                   | Output Dir            |
-| ------------ | -------------------- | -------------- | ------------------------------- | --------------------- |
-| **blog**     | `michaello-blog`     | `michaello.me` | `pnpm nx build blog --prod`     | `apps/blog/.next`     |
-| **lab-home** | `michaello-lab-home` | (via rewrite)  | `pnpm nx build lab-home --prod` | `apps/lab/home/.next` |
-| **slidevs**  | `michaello-slides`   | (via rewrite)  | `pnpm nx build slidevs --prod`  | `apps/slidevs/.next`  |
+| App           | Vercel Project        | Domain         | Build Command                    | Output Dir             | Ignore Command            |
+| ------------- | --------------------- | -------------- | -------------------------------- | ---------------------- | ------------------------- |
+| **portfolio** | `michaello-portfolio` | `michaello.me` | `pnpm nx build portfolio --prod` | `apps/portfolio/.next` | `npx nx-ignore portfolio` |
+| **blog**      | `michaello-blog`      | (via rewrite)  | `pnpm nx build blog --prod`      | `apps/blog/.next`      | `npx nx-ignore blog`      |
+| **lab-home**  | `michaello-lab-home`  | (via rewrite)  | `pnpm nx build lab-home --prod`  | `apps/lab/home/.next`  | `npx nx-ignore lab-home`  |
+| **slidevs**   | `michaello-slides`    | (via rewrite)  | `pnpm nx build slidevs --prod`   | `apps/slidevs/dist`    | `npx nx-ignore slidevs`   |
 
-**Multi-Zones Configuration** (`apps/blog/next.config.js`):
+**Multi-Zones Configuration** (`apps/portfolio/next.config.mjs`):
 
 ```javascript
 async rewrites() {
   return [
-    {
-      source: '/lab',
-      destination: 'https://michaello-lab-home.vercel.app/lab'
-    },
-    {
-      source: '/lab/:path*',
-      destination: 'https://michaello-lab-home.vercel.app/lab/:path*'
-    },
-    {
-      source: '/slides',
-      destination: 'https://michaello-slides.vercel.app/slides'
-    },
-    {
-      source: '/slides/:path*',
-      destination: 'https://michaello-slides.vercel.app/slides/:path*'
-    }
+    { source: '/posts', destination: 'https://michaello-blog.vercel.app/posts' },
+    { source: '/posts/:path*', destination: 'https://michaello-blog.vercel.app/posts/:path*' },
+    { source: '/lab', destination: 'https://michaello-lab-home.vercel.app/lab' },
+    { source: '/lab/:path*', destination: 'https://michaello-lab-home.vercel.app/lab/:path*' },
+    { source: '/talks', destination: 'https://michaello-slides.vercel.app/talks' },
+    { source: '/talks/:path*', destination: 'https://michaello-slides.vercel.app/talks/:path*' }
   ]
 }
 ```
 
-**Note**: Update Vercel URLs after deploying `lab-home` and `slidevs` projects.
-
-## 🚦 Quick Start
+## Quick Start
 
 ```bash
 # Install dependencies
@@ -133,48 +131,85 @@ pnpm install
 
 # Development
 pnpm dev                    # All apps
-pnpm nx dev blog            # Specific app
-pnpm nx dev lab-home
+pnpm nx dev portfolio       # Specific app (port 3000)
+pnpm nx dev blog            # Blog app (port 3001)
+pnpm nx dev lab-home        # Lab home (port 3002)
 
 # Production build
 pnpm build                  # All apps
-pnpm nx build blog --prod   # Specific app
+pnpm nx build portfolio --prod   # Specific app
 
 # Code quality
 pnpm lint
 pnpm format
 pnpm type-check
+
+# Nx utilities
+pnpm nx graph               # Visualize dependencies
+pnpm nx show projects       # List all projects
 ```
 
-## 📊 Data Flow
+## Blog Content Workflow
 
-```mermaid
-graph TD
-    User[User Request] --> DNS[michaello.me]
-    DNS --> Vercel[Vercel Edge Network]
+**Fully automated workflow** - metadata extraction is automatic via Git hooks.
 
-    Vercel --> Blog{Path Match}
+### Writing a New Post
 
-    Blog -->|/| BlogApp[Blog App<br/>Main Zone]
-    Blog -->|/posts/*| BlogApp
-    Blog -->|/projects| BlogApp
-    Blog -->|/talks| BlogApp
+1. **Create/Edit MDX file**: `apps/blog/content/posts/frontend/new-article.mdx`
 
-    Blog -->|/lab*| Rewrite1[Rewrite]
-    Rewrite1 --> LabApp[Lab Home App<br/>Separate Deployment]
+   ```yaml
+   ---
+   title: Article Title
+   description: Brief description
+   date: 2025-01-15
+   category: frontend
+   featured: true # Optional
+   icon: lucide:star # Optional
+   ---
+   Article content here...
+   ```
 
-    Blog -->|/slides*| Rewrite2[Rewrite]
-    Rewrite2 --> SlidesApp[Slidevs App<br/>Separate Deployment]
+2. **Commit your changes**:
 
-    BlogApp --> SharedConfig[site-config lib]
-    LabApp --> SharedConfig
-    SlidesApp --> SharedConfig
+   ```bash
+   git add apps/blog/content/posts/frontend/new-article.mdx
+   git commit -m "feat(blog): add new blog post about XXX"
+   # → Pre-commit hook automatically:
+   #    ✅ Detects MDX changes
+   #    ✅ Runs extract-metadata
+   #    ✅ Stages posts-metadata.json
+   ```
 
-    BlogApp --> SharedUI[shared-ui lib]
-    LabApp --> SharedUI
+3. **Push to deploy**:
+
+   ```bash
+   git push
+   # → Vercel automatically:
+   #    ✅ Blog app: Detects content changes → Rebuilds
+   #    ✅ Portfolio app: Detects metadata changes → Rebuilds
+   #    ⏭️ Other apps: Skips build (nx-ignore)
+   ```
+
+### Manual Metadata Extraction (if needed)
+
+```bash
+pnpm nx run blog-metadata:extract-metadata
 ```
 
-## 📦 Shared Libraries
+Only needed if you bypass Git hooks or need to regenerate metadata manually.
+
+## Shared Libraries
+
+### `blog-metadata`
+
+Extracts metadata from blog MDX files for Portfolio's article list:
+
+```typescript
+import { getAllPosts, getFeaturedPosts } from '@milo-me/blog-metadata';
+
+const allPosts = getAllPosts(); // All blog posts metadata
+const featured = getFeaturedPosts(3); // Top 3 featured posts
+```
 
 ### `site-config`
 
@@ -197,32 +232,32 @@ Shared UI components (shadcn/ui):
 import { Button, Card } from '@milo-me/shared-ui';
 ```
 
-## 🎯 Design Decisions
+## Design Decisions
 
-| Decision                      | Rationale                                                           |
-| ----------------------------- | ------------------------------------------------------------------- |
-| **Multi-Zones over Monolith** | Independent scaling, deployment, and tech stack per app             |
-| **Nx Monorepo**               | Code sharing, unified tooling, dependency graph                     |
-| **Separate Vercel Projects**  | Isolated deployments, independent CI/CD pipelines                   |
-| **Tailwind CSS v4**           | Zero-config, faster builds, better DX                               |
-| **Fumadocs**                  | MDX-first, type-safe, excellent DX for documentation                |
-| **Slidev**                    | Markdown-based slides with Vue 3, code highlighting, presenter mode |
+| Decision                      | Rationale                                               |
+| ----------------------------- | ------------------------------------------------------- |
+| **Multi-Zones over Monolith** | Independent scaling, deployment, and tech stack per app |
+| **Nx Monorepo**               | Code sharing, unified tooling, dependency graph         |
+| **blog-metadata Library**     | Decouples portfolio listing from blog content rendering |
+| **Separate Vercel Projects**  | Isolated deployments, independent CI/CD pipelines       |
+| **nx-ignore**                 | Skip unnecessary builds using Nx affected detection     |
+| **Tailwind CSS v4**           | Zero-config, faster builds, better DX                   |
+| **Fumadocs**                  | MDX-first, type-safe, excellent DX for documentation    |
 
-## 📚 Documentation
+## Documentation
 
-- **[CLAUDE.md](./CLAUDE.md)** - Complete development guide for AI assistants
-  - Commit conventions
-  - Development patterns (RADIO + TDD + DDD)
-  - Detailed build/deployment instructions
+- **[CLAUDE.md](./CLAUDE.md)** - Development guide for AI assistants (commit conventions, commands, patterns)
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Detailed architecture documentation (apps, libs, workflows, deployment)
 
-## 🔗 References
+## References
 
 - [Next.js Multi-Zones](https://nextjs.org/docs/advanced-features/multi-zones)
 - [Nx Monorepo](https://nx.dev)
 - [Fumadocs](https://fumadocs.vercel.app)
 - [Tailwind CSS v4](https://tailwindcss.com/blog/tailwindcss-v4-beta)
+- [nx-ignore on Vercel](https://vercel.com/docs/monorepos/nx)
 
 ---
 
 **License**: Private
-**Last Updated**: 2025-10-06
+**Last Updated**: 2025-01-23

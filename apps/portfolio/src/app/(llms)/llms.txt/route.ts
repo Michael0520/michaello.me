@@ -1,5 +1,6 @@
+import { getAllPosts } from '@milo-me/blog-metadata';
+
 import { SITE_INFO } from '@/config/site';
-import { getAllPosts } from '@/features/blog/data/posts';
 
 const allPosts = getAllPosts();
 
@@ -26,7 +27,7 @@ const content = `# chanhdai.com
 ${allPosts
   .map(
     (item) =>
-      `- [${item.metadata.title}](${SITE_INFO.url}/blog/${item.slug}.mdx): ${item.metadata.description}`
+      `- [${item.title}](${SITE_INFO.url}/posts/${item.slug}): ${item.description}`
   )
   .join('\n')}
 `;

@@ -1,10 +1,11 @@
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
+import { getAllPosts } from '@milo-me/blog-metadata';
 
 import { DesktopNav } from '@/components/desktop-nav';
 import { NavItemGitHub } from '@/components/nav-item-github';
 import { MAIN_NAV } from '@/config/site';
-import { getAllPosts } from '@/features/blog/data/posts';
+import { blogMetadataArrayToPosts } from '@/features/blog/lib/post-adapter';
 import { cn } from '@/lib/utils';
 
 import { SiteHeaderMark } from './site-header-mark';
@@ -24,7 +25,7 @@ const MobileNav = dynamic(() =>
 );
 
 export function SiteHeader() {
-  const posts = getAllPosts();
+  const posts = blogMetadataArrayToPosts(getAllPosts());
 
   return (
     <SiteHeaderWrapper

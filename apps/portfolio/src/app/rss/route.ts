@@ -1,7 +1,7 @@
 import dayjs from 'dayjs';
+import { getAllPosts } from '@milo-me/blog-metadata';
 
 import { SITE_INFO } from '@/config/site';
-import { getAllPosts } from '@/features/blog/data/posts';
 
 export const dynamic = 'force-static';
 
@@ -12,10 +12,10 @@ export function GET() {
     .map(
       (post) =>
         `<item>
-          <title>${post.metadata.title}</title>
-          <link>${SITE_INFO.url}/blog/${post.slug}</link>
-          <description>${post.metadata.description || ''}</description>
-          <pubDate>${dayjs(post.metadata.createdAt).toISOString()}</pubDate>
+          <title>${post.title}</title>
+          <link>${SITE_INFO.url}/posts/${post.slug}</link>
+          <description>${post.description || ''}</description>
+          <pubDate>${dayjs(post.date).toISOString()}</pubDate>
         </item>`
     )
     .join('\n');
