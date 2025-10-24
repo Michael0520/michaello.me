@@ -10,7 +10,9 @@
       "executor": "@nx/next:build",
       "dependsOn": ["^build", "slidevs:copy-to-portfolio"],
       "outputs": ["{workspaceRoot}/apps/portfolio/.next"],
-      "options": {},
+      "options": {
+        "outputPath": "apps/portfolio/.next"
+      },
       "configurations": {
         "development": {},
         "production": {}
