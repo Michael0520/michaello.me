@@ -25,11 +25,16 @@ const nextConfig = {
     externalDir: true,
   },
   webpack: (config) => {
-    // Add alias for blog-metadata library
+    // Add aliases for libraries and local paths
     config.resolve.alias['@milo-me/blog-metadata'] = path.resolve(
       __dirname,
       '../../dist/libs/blog-metadata/src/index.js'
     );
+    config.resolve.alias['@milo-me/site-config'] = path.resolve(
+      __dirname,
+      '../../libs/site-config/src/index.ts'
+    );
+    config.resolve.alias['@/lib/blog-source'] = path.resolve(__dirname, 'lib/blog-source.ts');
     return config;
   },
   images: {
