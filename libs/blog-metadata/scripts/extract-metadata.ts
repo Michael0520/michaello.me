@@ -14,7 +14,7 @@ interface PostMetadata {
 }
 
 function extractMetadata(): PostMetadata[] {
-  const contentPath = path.join(__dirname, '../../../apps/blog/content/posts');
+  const contentPath = path.join(__dirname, '../content/posts');
   const metadata: PostMetadata[] = [];
 
   if (!fs.existsSync(contentPath)) {

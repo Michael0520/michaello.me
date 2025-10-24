@@ -10,7 +10,7 @@
       "options": {
         "command": "pnpm dlx tsx libs/blog-metadata/scripts/extract-metadata.ts"
       },
-      "inputs": ["{workspaceRoot}/apps/blog/content/posts/**/*.mdx"],
+      "inputs": ["{workspaceRoot}/libs/blog-metadata/content/posts/**/*.mdx"],
       "outputs": ["{projectRoot}/src/lib/posts-metadata.json"]
     },
     "build": {

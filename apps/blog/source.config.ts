@@ -16,7 +16,7 @@ const blogSchema = frontmatterSchema.extend({
 });
 
 export const { docs: blog, meta: blogMeta } = defineDocs({
-  dir: 'content/posts',
+  dir: '../../libs/blog-metadata/content/posts',
   docs: {
     schema: blogSchema,
   },
@@ -24,9 +24,7 @@ export const { docs: blog, meta: blogMeta } = defineDocs({
 
 export default defineConfig({
   mdxOptions: {
-    remarkPlugins: [
-      [remarkImage, { external: false }], // Disable fetching external image sizes
-    ],
+    remarkPlugins: [[remarkImage, { useImport: false }]],
     rehypePlugins: [],
   },
 });

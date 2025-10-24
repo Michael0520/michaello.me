@@ -3,6 +3,13 @@
 
 set -e
 
+echo "=== Copying Blog images to apps (required before MDX compilation) ==="
+mkdir -p apps/portfolio/public/images
+mkdir -p apps/blog/public/images
+cp -r libs/blog-metadata/public/images/* apps/portfolio/public/images/
+cp -r libs/blog-metadata/public/images/* apps/blog/public/images/
+echo "Blog images copied to portfolio and blog apps"
+
 echo "=== Building blog-metadata (required for .source generation) ==="
 pnpm nx build blog-metadata
 

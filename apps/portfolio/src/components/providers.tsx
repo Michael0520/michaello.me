@@ -3,6 +3,7 @@
 import { AppProgressProvider } from '@bprogress/next';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
+import { RootProvider } from 'fumadocs-ui/provider';
 import { Provider as JotaiProvider } from 'jotai';
 import dynamic from 'next/dynamic';
 import { ThemeProvider } from 'next-themes';
@@ -23,18 +24,20 @@ export function Providers({ children }: { children: React.ReactNode }) {
         defaultTheme="system"
         attribute="class"
       >
-        <AppProgressProvider
-          color="var(--foreground)"
-          height="2px"
-          delay={500}
-          options={{ showSpinner: false }}
-        >
-          {children}
-        </AppProgressProvider>
+        <RootProvider>
+          <AppProgressProvider
+            color="var(--foreground)"
+            height="2px"
+            delay={500}
+            options={{ showSpinner: false }}
+          >
+            {children}
+          </AppProgressProvider>
 
-        <Toaster />
-        <Analytics />
-        <SpeedInsights />
+          <Toaster />
+          <Analytics />
+          <SpeedInsights />
+        </RootProvider>
       </ThemeProvider>
     </JotaiProvider>
   );
