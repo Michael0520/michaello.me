@@ -3,6 +3,9 @@
 
 set -e
 
+echo "=== Building blog-metadata (required for .source generation) ==="
+pnpm nx build blog-metadata
+
 echo "=== Building Slidevs ==="
 pnpm nx build slidevs
 

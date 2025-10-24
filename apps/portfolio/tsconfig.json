@@ -24,7 +24,10 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "paths": {
       "@/*": ["./src/*"],
-      "@milo-me/blog-metadata": ["../../dist/libs/blog-metadata/src/index.d.ts"]
+      "@milo-me/blog-metadata": [
+        "../../dist/libs/blog-metadata/src/index.d.ts"
+      ],
+      "@milo-me/site-config": ["../../libs/site-config/src/index.ts"]
     }
   },
   "include": [
