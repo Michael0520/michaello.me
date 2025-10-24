@@ -10,12 +10,16 @@
       "options": {
         "command": "pnpm dlx tsx libs/blog-metadata/scripts/extract-metadata.ts"
       },
-      "inputs": ["{workspaceRoot}/apps/blog/content/posts/**/*.mdx"],
+      "inputs": ["{workspaceRoot}/libs/blog-metadata/content/posts/**/*.mdx"],
       "outputs": ["{projectRoot}/src/lib/posts-metadata.json"]
     },
     "build": {
       "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{options.outputPath}",
+        "{workspaceRoot}/apps/portfolio/public/images",
+        "{workspaceRoot}/apps/blog/public/images"
+      ],
       "options": {
         "outputPath": "dist/libs/blog-metadata",
         "main": "libs/blog-metadata/src/index.ts",
@@ -31,6 +35,16 @@
             "input": "libs/blog-metadata/src/lib",
             "glob": "posts-metadata.json",
             "output": "./src/lib"
+          },
+          {
+            "input": "libs/blog-metadata/public/images",
+            "glob": "**/*",
+            "output": "../../../apps/portfolio/public/images"
+          },
+          {
+            "input": "libs/blog-metadata/public/images",
+            "glob": "**/*",
+            "output": "../../../apps/blog/public/images"
           }
         ]
       },

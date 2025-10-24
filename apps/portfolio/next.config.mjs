@@ -1,11 +1,14 @@
 //@ts-check
 
 import { composePlugins, withNx } from '@nx/next';
+import { createMDX } from 'fumadocs-mdx/next';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const withMDX = createMDX();
 
 /**
  * @type {import('@nx/next/plugins/with-nx').WithNxOptions}
@@ -15,17 +18,23 @@ const nextConfig = {
     svgr: false,
   },
   reactStrictMode: true,
-  transpilePackages: ['next-mdx-remote', '@milo-me/blog-metadata'],
+  transpilePackages: ['next-mdx-remote', '@milo-me/blog-metadata', '@milo-me/site-config', 'fumadocs-core', 'fumadocs-mdx'],
   devIndicators: false,
+  pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
   experimental: {
     externalDir: true,
   },
   webpack: (config) => {
-    // Add alias for blog-metadata library
+    // Add aliases for libraries and local paths
     config.resolve.alias['@milo-me/blog-metadata'] = path.resolve(
       __dirname,
       '../../dist/libs/blog-metadata/src/index.js'
     );
+    config.resolve.alias['@milo-me/site-config'] = path.resolve(
+      __dirname,
+      '../../libs/site-config/src/index.ts'
+    );
+    config.resolve.alias['@/lib/blog-source'] = path.resolve(__dirname, 'lib/blog-source.ts');
     return config;
   },
   images: {
@@ -38,39 +47,8 @@ const nextConfig = {
     ],
     qualities: [75, 100],
   },
-  async rewrites() {
-    return [
-      // Blog zone rewrites
-      {
-        source: '/posts',
-        destination: 'https://michaello-blog.vercel.app/posts',
-      },
-      {
-        source: '/posts/:path*',
-        destination: 'https://michaello-blog.vercel.app/posts/:path*',
-      },
-      // Lab zone rewrites
-      {
-        source: '/lab',
-        destination: 'https://michaello-lab-home.vercel.app/lab',
-      },
-      {
-        source: '/lab/:path*',
-        destination: 'https://michaello-lab-home.vercel.app/lab/:path*',
-      },
-      // Slides zone rewrites
-      {
-        source: '/talks',
-        destination: 'https://michaello-slides.vercel.app/talks',
-      },
-      {
-        source: '/talks/:path*',
-        destination: 'https://michaello-slides.vercel.app/talks/:path*',
-      },
-    ];
-  },
 };
 
 const plugins = [withNx];
 
-export default composePlugins(...plugins)(nextConfig);
+export default composePlugins(...plugins)(withMDX(nextConfig));

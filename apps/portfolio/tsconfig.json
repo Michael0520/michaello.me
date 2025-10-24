@@ -24,7 +24,11 @@
     "lib": ["dom", "dom.iterable", "esnext"],
     "paths": {
       "@/*": ["./src/*"],
-      "@milo-me/blog-metadata": ["../../dist/libs/blog-metadata/src/index.d.ts"]
+      "@/lib/blog-source": ["./lib/blog-source.ts"],
+      "@milo-me/blog-metadata": [
+        "../../dist/libs/blog-metadata/src/index.d.ts"
+      ],
+      "@milo-me/site-config": ["../../libs/site-config/src/index.ts"]
     }
   },
   "include": [
@@ -34,8 +38,9 @@
     "**/*.tsx",
     "../../apps/portfolio/.next/types/**/*.ts",
     "../../dist/apps/portfolio/.next/types/**/*.ts",
+    ".next/types/**/*.ts",
     "next-env.d.ts",
-    ".next/types/**/*.ts"
+    "../../apps/portfolio/.next/.next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules",
