@@ -21,7 +21,6 @@ const nextConfig = {
   transpilePackages: ['next-mdx-remote', '@milo-me/blog-metadata', '@milo-me/site-config', 'fumadocs-core', 'fumadocs-mdx'],
   devIndicators: false,
   pageExtensions: ['js', 'jsx', 'ts', 'tsx', 'md', 'mdx'],
-  output: 'standalone',
   experimental: {
     externalDir: true,
   },
