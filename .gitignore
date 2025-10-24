@@ -68,10 +68,6 @@ apps/portfolio/public/talks/
 apps/portfolio/public/images/
 apps/blog/public/images/
 
-# Vercel build artifacts (copied to root during build)
-/next.config.mjs
-/public
-
 # Nx Graph
 static/
 project-graph.html

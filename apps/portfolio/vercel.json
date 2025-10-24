@@ -3,6 +3,7 @@
   "version": 2,
   "buildCommand": "bash scripts/build-with-slidevs.sh",
   "installCommand": "pnpm install",
+  "outputDirectory": "apps/portfolio/.next",
   "framework": "nextjs",
   "ignoreCommand": "npx nx-ignore portfolio"
 }
