@@ -2,6 +2,7 @@
   "name": "@milo-me/source",
   "version": "0.0.0",
   "license": "MIT",
+  "packageManager": "pnpm@10.19.0",
   "scripts": {
     "prepare": "husky",
     "dev": "nx run-many --target=dev --all",
