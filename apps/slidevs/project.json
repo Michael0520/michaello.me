@@ -13,11 +13,31 @@
     },
     "build": {
       "executor": "nx:run-commands",
+      "outputs": [
+        "{projectRoot}/dist",
+        "{workspaceRoot}/apps/portfolio/public/talks"
+      ],
       "options": {
         "command": "sh build-all.sh",
-        "cwd": "apps/slidevs"
+        "cwd": "apps/slidevs",
+        "parallel": false
       },
-      "outputs": ["{projectRoot}/dist"]
+      "configurations": {
+        "production": {}
+      }
+    },
+    "copy-to-portfolio": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "outputs": ["{workspaceRoot}/apps/portfolio/public/talks"],
+      "options": {
+        "commands": [
+          "mkdir -p apps/portfolio/public/talks",
+          "rm -rf apps/portfolio/public/talks/*",
+          "cp -r apps/slidevs/dist/talks/* apps/portfolio/public/talks/ || echo 'No talks to copy'"
+        ],
+        "parallel": false
+      }
     },
     "export": {
       "executor": "nx:run-commands",

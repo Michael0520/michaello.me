@@ -1,7 +1,6 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "buildCommand": "bash scripts/build-with-slidevs.sh",
   "installCommand": "pnpm install",
   "outputDirectory": "apps/portfolio/.next",
   "framework": "nextjs",
