@@ -64,6 +64,14 @@ apps/portfolio/.source
 # Slidevs build output (copied during build)
 apps/portfolio/public/talks/
 
+# Blog images (copied during build)
+apps/portfolio/public/images/
+apps/blog/public/images/
+
+# Vercel build artifacts (copied to root during build)
+/next.config.mjs
+/public
+
 # Nx Graph
 static/
 project-graph.html

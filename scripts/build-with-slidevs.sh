@@ -29,4 +29,11 @@ fi
 echo "=== Building Portfolio (includes Blog, Lab, Projects, Talks routes) ==="
 pnpm nx build portfolio --prod
 
+echo "=== Copying Portfolio build output to root for Vercel ==="
+rm -rf .next public
+cp -r apps/portfolio/.next .next
+cp -r apps/portfolio/public public
+cp apps/portfolio/next.config.mjs next.config.mjs
+echo "Build output, public files, and config copied to root"
+
 echo "=== Build complete ==="
