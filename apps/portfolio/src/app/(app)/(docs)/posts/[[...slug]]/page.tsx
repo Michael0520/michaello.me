@@ -1,4 +1,4 @@
-import { blogSource } from '../../../../../lib/blog-source';
+import { blogSource } from '../../../../lib/blog-source';
 import {
   DocsPage,
   DocsBody,

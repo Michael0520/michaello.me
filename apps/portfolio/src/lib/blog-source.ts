@@ -2,7 +2,7 @@ import { loader } from 'fumadocs-core/source';
 import { createMDXSource } from 'fumadocs-mdx';
 import { icons } from 'lucide-react';
 import { createElement } from 'react';
-import { blog, blogMeta } from '../.source';
+import { blog, blogMeta } from '../../.source';
 
 export const blogSource = loader({
   baseUrl: '/posts',
