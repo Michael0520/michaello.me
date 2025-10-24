@@ -59,6 +59,10 @@ out
 # Fumadocs
 .source
 apps/docs/.source
+apps/portfolio/.source
+
+# Slidevs build output (copied during build)
+apps/portfolio/public/talks/
 
 # Nx Graph
 static/
