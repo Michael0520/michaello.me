@@ -1,5 +1,244 @@
 [
   {
+    "slug": "14-diameter-of-binary-tree",
+    "title": "Diameter of Binary Tree",
+    "description": "Find the longest path between any two nodes in a binary tree",
+    "date": "2025-10-25T06:01:26.264Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "Diameter"
+  },
+  {
+    "slug": "05-add-binary",
+    "title": "Add Binary",
+    "description": "Add two binary strings and return their sum in binary format",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "Plus"
+  },
+  {
+    "slug": "06-insert-interval",
+    "title": "Insert Interval",
+    "description": "Insert a new interval into sorted non-overlapping intervals and merge if necessary",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "Layers"
+  },
+  {
+    "slug": "07-01-matrix",
+    "title": "01 Matrix",
+    "description": "Calculate distance to nearest 0 for each cell using multi-source BFS",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "Grid3x3"
+  },
+  {
+    "slug": "08-maximum-depth-of-binary-tree",
+    "title": "Maximum Depth of Binary Tree",
+    "description": "Find the maximum depth of a binary tree using recursive traversal",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "TreePine"
+  },
+  {
+    "slug": "09-reverse-linked-list",
+    "title": "Reverse Linked List",
+    "description": "Reverse a singly linked list using iterative approach with pointer manipulation",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "RotateCcw"
+  },
+  {
+    "slug": "10-contains-duplicate",
+    "title": "Contains Duplicate",
+    "description": "Detect if array contains duplicate elements using Set or Map",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "Copy"
+  },
+  {
+    "slug": "11-majority-element",
+    "title": "Majority Element",
+    "description": "Find the element that appears more than n/2 times using sorting approach",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "TrendingUp"
+  },
+  {
+    "slug": "12-maximum-subarray",
+    "title": "Maximum Subarray",
+    "description": "Find the contiguous subarray with maximum sum using Kadane's algorithm",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "BarChart3"
+  },
+  {
+    "slug": "13-middle-of-the-linked-list",
+    "title": "Middle of the Linked List",
+    "description": "Find the middle node of a linked list using two-pointer technique",
+    "date": "2025-10-25T06:01:26.263Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "Link"
+  },
+  {
+    "slug": "index",
+    "title": "Blog",
+    "description": "技術文章與學習筆記",
+    "date": "2025-10-25T06:01:26.262Z",
+    "category": "index.mdx",
+    "featured": false,
+    "icon": "lucide:newspaper"
+  },
+  {
+    "slug": "01-two-sum",
+    "title": "Two Sum",
+    "description": "Find two numbers that add up to target using Hash Map - O(n) time complexity",
+    "date": "2025-10-25T06:01:26.262Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "Hash"
+  },
+  {
+    "slug": "02-climbing-stairs",
+    "title": "Climbing Stairs",
+    "description": "Dynamic programming solution using Fibonacci sequence pattern",
+    "date": "2025-10-25T06:01:26.262Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "TrendingUp"
+  },
+  {
+    "slug": "03-ransom-note",
+    "title": "Ransom Note",
+    "description": "Check if ransom note can be constructed from magazine using Hash Map",
+    "date": "2025-10-25T06:01:26.262Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "FileText"
+  },
+  {
+    "slug": "04-longest-palindrome",
+    "title": "Longest Palindrome",
+    "description": "Calculate longest palindrome length using Set for character pairing",
+    "date": "2025-10-25T06:01:26.262Z",
+    "category": "leetcode",
+    "featured": false,
+    "icon": "Repeat"
+  },
+  {
+    "slug": "hooks-comparison",
+    "title": "useCallback vs useMemo",
+    "description": "A comprehensive guide to React performance optimization using useCallback and useMemo with real-world examples",
+    "date": "2025-03-11T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "autocomplete",
+    "title": "Autocomplete System design",
+    "description": "A comprehensive guide to designing a modern autocomplete component with React and TypeScript",
+    "date": "2025-03-09T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "array-filter",
+    "title": "Array.prototype.filter Implementation",
+    "description": "Implement a Custom Array Filter Method",
+    "date": "2025-03-03T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "promise-all",
+    "title": "Promise.all Implementation",
+    "description": "Implement a Custom Promise.all Function",
+    "date": "2025-03-02T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "curry",
+    "title": "Function Currying",
+    "description": "Implement a Curry Function",
+    "date": "2025-03-01T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "hierarchical-checkbox",
+    "title": "Hierarchical Checkbox Selection",
+    "description": "Implement a Hierarchical Checkbox Selection System",
+    "date": "2025-02-27T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "consolidate-data",
+    "title": "Data Aggregation",
+    "description": "Implement a Reading Analytics Aggregator",
+    "date": "2025-02-26T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "event-bubbling",
+    "title": "Event Bubbling",
+    "description": "Understanding Event Bubbling in DOM",
+    "date": "2025-02-25T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "throttle-debounce",
+    "title": "Throttle and Debounce",
+    "description": "Implement Throttle and Debounce Functions",
+    "date": "2025-02-24T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "memoize",
+    "title": "Function Memoization",
+    "description": "Implement a Memoize Function",
+    "date": "2025-02-23 19:00",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "pipe-promise",
+    "title": "Pipe Promise",
+    "description": "Implement Promise Pipeline",
+    "date": "2025-02-22T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "prime-number",
+    "title": "Prime Number",
+    "description": "Advanced prime number implementations with non-blocking calculation and caching optimization",
+    "date": "2025-02-21T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "flat-array",
+    "title": "Array Flatten - extend Array.prototype.myFlat",
+    "description": "Implementation of array flattening by extending Array prototype",
+    "date": "2025-02-20T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
     "slug": "functional-programming-concepts",
     "title": "Functional Programming Concepts - Curry、Compose、Pipe",
     "description": "探討函數式編程中的 Curry、Compose、Pipe 的實作與應用",
@@ -7,6 +246,30 @@
     "category": "frontend",
     "featured": false,
     "icon": "lucide:book-open-text"
+  },
+  {
+    "slug": "pipe",
+    "title": "Pipe Function Implementation",
+    "description": "In this blog I will Share a solution to the Pipe Function Implementation problem.",
+    "date": "2025-02-18T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "retry-promise",
+    "title": "Retry Promise",
+    "description": "In this blog I will share a solution to the Retry Promise interview problem.",
+    "date": "2025-02-18T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
+  },
+  {
+    "slug": "countdown-timer",
+    "title": "Countdown Timer",
+    "description": "In this blog I will share a solution to the Countdown Timer interview problem.",
+    "date": "2025-02-17T00:00:00.000Z",
+    "category": "frontend",
+    "featured": false
   },
   {
     "slug": "radio-pattern",
@@ -52,6 +315,54 @@
     "category": "tech-talk",
     "featured": false,
     "icon": "lucide:bot"
+  },
+  {
+    "slug": "232-implement-queue-using-stacks",
+    "title": "Easy 232. Implement Queue using Stacks",
+    "description": "In this blog I will share a solution to the Implement Queue using Stacks problem.",
+    "date": "2025-01-26T00:00:00.000Z",
+    "category": "leetcode",
+    "featured": false
+  },
+  {
+    "slug": "110-balanced-binary-tree",
+    "title": "Easy 110. Balanced Binary Tree",
+    "description": "In this blog I will share a solution to the Balanced Binary Tree problem.",
+    "date": "2025-01-19T00:00:00.000Z",
+    "category": "leetcode",
+    "featured": false
+  },
+  {
+    "slug": "235-lowest-common-ancestor-of-binary-search-tree",
+    "title": "Medium 235. Lowest Common Ancestor of a Binary Search Tree",
+    "description": "In this blog I will share a solution to the Lowest Common Ancestor of a Binary Search Tree problem.",
+    "date": "2025-01-17T00:00:00.000Z",
+    "category": "leetcode",
+    "featured": false
+  },
+  {
+    "slug": "125-valid-palindrome",
+    "title": "Easy 125. Valid Palindrome",
+    "description": "In this blog I will share a solution to the Valid Palindrome problem.",
+    "date": "2025-01-14T00:00:00.000Z",
+    "category": "leetcode",
+    "featured": false
+  },
+  {
+    "slug": "21-merge-two-sorted-lists",
+    "title": "Easy 21 - Merge Two Sorted Lists",
+    "description": "In this blog I will share a solution to the Merge Two Sorted Lists problem.",
+    "date": "2025-01-13T00:00:00.000Z",
+    "category": "leetcode",
+    "featured": false
+  },
+  {
+    "slug": "20-valid-parentheses",
+    "title": "Easy 02 - Valid Parentheses",
+    "description": "In this blog I will share a solution to the Valid Parentheses problem.",
+    "date": "2025-01-11T00:00:00.000Z",
+    "category": "leetcode",
+    "featured": false
   },
   {
     "slug": "encode",
