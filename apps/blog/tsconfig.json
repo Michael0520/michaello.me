@@ -15,11 +15,20 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@milo-me/shared-ui": ["../../libs/shared-ui/src/index.ts"],
+      "@milo-me/site-config": ["../../libs/site-config/src/index.ts"],
+      "@milo-me/blog-metadata": ["../../libs/blog-metadata/src/index.ts"],
+      "@milo-me/blog-content": ["../../libs/blog-content"]
+    },
     "plugins": [
       {
         "name": "next"
       }
-    ]
+    ],
+    "types": ["node"]
   },
   "include": [
     "**/*.js",

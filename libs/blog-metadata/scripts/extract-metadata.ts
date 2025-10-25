@@ -13,8 +13,33 @@ interface PostMetadata {
   icon?: string;
 }
 
+// Recursively find all MDX files in a directory
+function findMdxFiles(dir: string): string[] {
+  const mdxFiles: string[] = [];
+  const items = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const item of items) {
+    const fullPath = path.join(dir, item.name);
+
+    if (item.isDirectory()) {
+      // Skip directories starting with _ (like _dir.yml directories)
+      if (!item.name.startsWith('_')) {
+        mdxFiles.push(...findMdxFiles(fullPath));
+      }
+    } else if (item.isFile() && item.name.endsWith('.mdx')) {
+      mdxFiles.push(fullPath);
+    }
+  }
+
+  return mdxFiles;
+}
+
 function extractMetadata(): PostMetadata[] {
-  const contentPath = path.join(__dirname, '../../../apps/blog/content/posts');
+  // Use shared content library
+  const contentPath = path.join(
+    __dirname,
+    '../../../libs/blog-content/content/posts'
+  );
   const metadata: PostMetadata[] = [];
 
   if (!fs.existsSync(contentPath)) {
@@ -22,34 +47,28 @@ function extractMetadata(): PostMetadata[] {
     return [];
   }
 
-  // 遍歷所有類別
-  const categories = fs
-    .readdirSync(contentPath, { withFileTypes: true })
-    .filter((dirent) => dirent.isDirectory())
-    .map((dirent) => dirent.name);
+  // Find all MDX files recursively
+  const allMdxFiles = findMdxFiles(contentPath);
 
-  for (const category of categories) {
-    const categoryPath = path.join(contentPath, category);
-    const files = fs
-      .readdirSync(categoryPath)
-      .filter((f) => f.endsWith('.mdx'));
+  for (const filePath of allMdxFiles) {
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    const { data } = matter(fileContent);
 
-    for (const file of files) {
-      const filePath = path.join(categoryPath, file);
-      const fileContent = fs.readFileSync(filePath, 'utf-8');
-      const { data } = matter(fileContent);
+    // Extract category from path (first directory after posts/)
+    const relativePath = path.relative(contentPath, filePath);
+    const pathParts = relativePath.split(path.sep);
+    const category = pathParts[0];
 
-      metadata.push({
-        slug: path.basename(file, '.mdx'),
-        title: data.title || 'Untitled',
-        description: data.description || '',
-        date: data.date || data.createdAt || new Date().toISOString(),
-        category: data.category || category,
-        image: data.image,
-        featured: data.featured || false,
-        icon: data.icon,
-      });
-    }
+    metadata.push({
+      slug: path.basename(filePath, '.mdx'),
+      title: data.title || 'Untitled',
+      description: data.description || '',
+      date: data.date || data.createdAt || new Date().toISOString(),
+      category: data.category || category,
+      image: data.image,
+      featured: data.featured || false,
+      icon: data.icon,
+    });
   }
 
   return metadata.sort(
