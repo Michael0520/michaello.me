@@ -6,16 +6,13 @@ import {
 import { remarkImage } from 'fumadocs-core/mdx-plugins';
 import { z } from 'zod';
 
-export const { docs, meta } = defineDocs({
-  dir: 'content/docs',
-});
-
+// Blog posts schema
 const blogSchema = frontmatterSchema.extend({
   date: z.coerce.string().optional(),
   read: z.string().optional(),
 });
 
-// Use shared content library
+// Define blog posts source from shared content library
 export const { docs: blog, meta: blogMeta } = defineDocs({
   dir: '../../libs/blog-content/content/posts',
   docs: {

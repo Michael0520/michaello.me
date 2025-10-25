@@ -14,7 +14,11 @@ interface PostMetadata {
 }
 
 function extractMetadata(): PostMetadata[] {
-  const contentPath = path.join(__dirname, '../../../apps/blog/content/posts');
+  // Use shared content library
+  const contentPath = path.join(
+    __dirname,
+    '../../../libs/blog-content/content/posts'
+  );
   const metadata: PostMetadata[] = [];
 
   if (!fs.existsSync(contentPath)) {
